@@ -71,12 +71,12 @@ export default function LeaveRequestForm() {
         setValue(newValue);
     };
 
-    const closePopupWithConfirmation = () => {
-        const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
-        if (isConfirmed) {
-            closePopup();
-        }
-    };
+    // const closePopupWithConfirmation = () => {
+    //     const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
+    //     if (isConfirmed) {
+    //         closePopup();
+    //     }
+    // };
 
     // Thêm phần message cho boss điền đồng ý hoặc từ chối đơn xin nghỉ
     const [message, setMessage] = useState("");
@@ -133,14 +133,14 @@ export default function LeaveRequestForm() {
         <>
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
                 <div className="relative place-items-center">
-                    {!isPopupOpen && (
-                        <button onClick={openPopup} className="open-popup-btn">
+                    {/* {!isPopupOpen && ( */}
+                        <button onClick={openPopup} className="open-popup-btn" data-toggle="modal" data-target="#exampleModal">
                            Mở Chi tiết đơn nghỉ phép
                         </button>
-                    )}
+                    {/* )} */}
                     {isPopupOpen && (
-                        <div className="popup min-w-full bg-white rounded-lg w-[500px]">
-                            <div className="popup-inner p-4 rounded-lg">
+                        <div className="modal-bg fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+                            <div className="modal p-4 bg-white rounded-lg w-[500px]">
                                 <h2 className="text-center text-4xl font-semibold "> Chi tiết đơn nghỉ phép </h2>
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-group flex justify-between m-4">
@@ -225,16 +225,17 @@ export default function LeaveRequestForm() {
                                     <div className="form-buttons flex justify-center gap-4">
                                         <button
                                             type="button"
-                                            onClick={closePopupWithConfirmation}
-                                            className="btn bg-red-500 px-4 py-2 rounded-lg text-white"
+                                            onClick={closePopup}
+                                            className="btn bg-gray-500 px-4 py-2 rounded-lg text-white"
                                         >
-                                            Từ chối
+                                            Đóng
+                                        </button>
+                                        
+                                        <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
+                                           Từ chối
                                         </button>
                                         <button type="button" onClick={handleApprove} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
                                            Chấp nhận
-                                        </button>
-                                        <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
-                                           Từ chối
                                         </button>
                                     </div>
                                 </form>
