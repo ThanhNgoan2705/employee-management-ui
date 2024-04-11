@@ -52,7 +52,7 @@ export default function LeaveRequestForm() {
             };
             console.log(requestData);
             setRequestId(requestId + 1);
-         
+
             closePopup();
             alert("Bạn đã gửi đơn đăng ký thành công");
             setValue({
@@ -134,13 +134,20 @@ export default function LeaveRequestForm() {
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
                 <div className="relative place-items-center">
                     {/* {!isPopupOpen && ( */}
-                        <button onClick={openPopup} className="open-popup-btn" data-toggle="modal" data-target="#exampleModal">
-                           Mở Chi tiết đơn nghỉ phép
-                        </button>
+                    <button onClick={openPopup} className="open-popup-btn" data-toggle="modal" data-target="#exampleModal">
+                        Mở Chi tiết đơn nghỉ phép
+                    </button>
                     {/* )} */}
                     {isPopupOpen && (
                         <div className="modal-bg fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
                             <div className="modal p-4 bg-white rounded-lg w-[500px]">
+                                <div className="flex justify-end">
+                                    <button onClick={closePopup} className="text-gray-500 hover:text-gray-700 focus:outline-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
                                 <h2 className="text-center text-4xl font-semibold "> Chi tiết đơn nghỉ phép </h2>
                                 <form onSubmit={handleSubmit}>
                                     <div className="form-group flex justify-between m-4">
@@ -184,9 +191,9 @@ export default function LeaveRequestForm() {
                                     </div>
                                     <div className="form-group flex justify-between m-4">
                                         <label htmlFor="leaveDates" className="my-auto">
-                                            Chọn ngày nghỉ:
+                                            Thời gian nghỉ:
                                         </label>
-                                        <div className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
+                                        {/* <div className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
                                             <Datepicker
                                                 value={value}
                                                 onChange={handleValueChange}
@@ -194,7 +201,15 @@ export default function LeaveRequestForm() {
                                                 dateFormat="dd/MM/yyyy"
                                                 style={{ outline: "none", backgroundColor: "#d1d5db" }}
                                             />
-                                        </div>
+                                        </div> */}
+                                        <input
+                                            type="text"
+                                            id="leaveDates"
+                                            name="leaveDates"
+                                            value="01/04/2024 - 05/04/2024" // Giá trị cụ thể
+                                            className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                            readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
+                                        />
                                     </div>
                                     <div className="form-group flex justify-between m-4">
                                         <label htmlFor="reason" className="my-auto">
@@ -204,13 +219,15 @@ export default function LeaveRequestForm() {
                                             id="reason"
                                             name="reason"
                                             rows="4"
+                                            value="Nghỉ phép hưởng lương" // Giá trị cụ thể
                                             className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
                                             maxLength={100}
+                                            readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
                                         ></textarea>
                                     </div>
                                     <div className="form-group flex justify-between m-4">
                                         <label htmlFor="message" className="my-auto">
-                                           Lý do từ chối đơn nghỉ (boss)
+                                            Lý do từ chối đơn nghỉ (boss)
                                         </label>
                                         <textarea
                                             id="message"
@@ -223,19 +240,19 @@ export default function LeaveRequestForm() {
                                         ></textarea>
                                     </div>
                                     <div className="form-buttons flex justify-center gap-4">
-                                        <button
+                                        {/* <button
                                             type="button"
                                             onClick={closePopup}
                                             className="btn bg-gray-500 px-4 py-2 rounded-lg text-white"
                                         >
                                             Đóng
-                                        </button>
-                                        
+                                        </button> */}
+
                                         <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
-                                           Từ chối
+                                            Từ chối
                                         </button>
                                         <button type="button" onClick={handleApprove} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
-                                           Chấp nhận
+                                            Chấp nhận
                                         </button>
                                     </div>
                                 </form>
