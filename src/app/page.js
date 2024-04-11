@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import LeaveRequestForm from "./LeaveRequestForm/page";
-import ExitRequestForm from "./exitRequestForm/page";
+import LeaveRequestForm from "@/pages/LeaveRequestForm/page";
+import ExitRequestForm from "@/pages/exitRequestForm/page";
 
 export default function Home() {
   return (
