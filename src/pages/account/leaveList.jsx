@@ -9,7 +9,7 @@ export default function LeaveList() {
     const [leaveList, setLeaveList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
-
+    let leaveDaysLeft = 0;
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
@@ -166,170 +166,35 @@ const handleReject = () => {
                     <div className="flex max-w-full border-2">
                         <table className="table-auto w-full justify-center items-center text-center">
                             <thead>
-                                <tr>
-                                    <th className='w-1.5'>id</th>
-                                    <th className='w-1.5'>from</th>
-                                    <th className='w-1.5'>to</th>
-                                    <th className='w-1.5'>status</th>
-                                    <th className='w-1/6'>action</th>
-                                </tr>
+                            <tr>
+                                <th className='w-1.5'>id</th>
+                                <th className='w-1.5'>from</th>
+                                <th className='w-1.5'>to</th>
+                                <th className='w-1.5'>status</th>
+                                <th className='w-1/6'>action</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {currentItems.map((leave, index) => (
-                                    <tr key={index}>
-                                        <td className="border px-4 py-2">{leave.name}</td>
-                                        <td className="border px-4 py-2">{leave.username}</td>
-                                        <td className="border px-4 py-2">{leave.email}</td>
-                                        <td className="border px-4 py-2">{leave.phone}</td>
-                                        <td className="border px-4 py-2">
-                                            <div className="flex items-center justify-between">
-                                                
-                                                    <button
-                                                    onClick={openPopup}
-                                                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                                        data-toggle="modal" data-target="#exampleModal"
-                                                        >
-                                                        <FontAwesomeIcon icon={faEye} />
-                                                    </button>
-                                              
-                                                {isPopupOpen && (
-                                                    <div className="modal-bg fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
-                                                        <div className="modal p-4 bg-white rounded-lg w-[500px]">
-                                                            <div className="flex justify-end">
-                                                                <button onClick={closePopup} className="text-gray-500 hover:text-gray-700 focus:outline-none">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                            <h2 className="text-center text-4xl font-semibold "> Chi tiết đơn nghỉ phép </h2>
-                                                            <form onSubmit={handleSubmit}>
-                                                                <div className="form-group flex justify-between m-4">
-                                                                    <label htmlFor="fullName" className="my-auto">
-                                                                        Họ tên:
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        id="fullName"
-                                                                        name="fullName"
-                                                                        value={formData.fullName}
-                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
-                                                                        readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
-                                                                    />
-                                                                </div>
-                                                                <div className="form-group flex justify-between m-4">
-                                                                    <label htmlFor="department" className="my-auto">
-                                                                        Phòng ban:
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        id="department"
-                                                                        name="department"
-                                                                        value={formData.department}
-                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
-                                                                        readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
-                                                                    />
-                                                                </div>
-                                                                <div className="form-group flex justify-between m-4">
-                                                                    <label htmlFor="department" className="my-auto">
-                                                                        Chức vụ:
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        id="role"
-                                                                        name="role"
-                                                                        value={formData.role}
-                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
-                                                                        readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
-                                                                    />
-                                                                </div>
-                                                                <div className="form-group flex justify-between m-4">
-                                                                    <label htmlFor="leaveDates" className="my-auto">
-                                                                        Thời gian nghỉ:
-                                                                    </label>
-                                                                    {/* <div className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
-                                            <Datepicker
-                                                value={value}
-                                                onChange={handleValueChange}
-                                                showShortcuts={true}
-                                                dateFormat="dd/MM/yyyy"
-                                                style={{ outline: "none", backgroundColor: "#d1d5db" }}
-                                            />
-                                        </div> */}
-                                                                    <input
-                                                                        type="text"
-                                                                        id="leaveDates"
-                                                                        name="leaveDates"
-                                                                        value="01/04/2024 - 05/04/2024" // Giá trị cụ thể
-                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
-                                                                        readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
-                                                                    />
-                                                                </div>
-                                                                <div className="form-group flex justify-between m-4">
-                                                                    <label htmlFor="reason" className="my-auto">
-                                                                        Lý do xin nghỉ:
-                                                                    </label>
-                                                                    <textarea
-                                                                        id="reason"
-                                                                        name="reason"
-                                                                        rows="4"
-                                                                        value="Nghỉ phép hưởng lương" // Giá trị cụ thể
-                                                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
-                                                                        maxLength={100}
-                                                                        readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
-                                                                    ></textarea>
-                                                                </div>
-                                                                <div className="form-group flex justify-between m-4">
-                                                                    <label htmlFor="message" className="my-auto">
-                                                                        Lý do từ chối đơn nghỉ (boss)
-                                                                    </label>
-                                                                    <textarea
-                                                                        id="message"
-                                                                        name="message"
-                                                                        rows="4"
-                                                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
-                                                                        maxLength={100}
-                                                                        value={message}
-                                                                        onChange={handleBossAction}
-                                                                    ></textarea>
-                                                                </div>
-                                                                <div className="form-buttons flex justify-center gap-4">
-                                                                    {/* <button
-                                            type="button"
-                                            onClick={closePopup}
-                                            className="btn bg-gray-500 px-4 py-2 rounded-lg text-white"
-                                        >
-                                            Đóng
-                                        </button> */}
-
-                                                                    <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
-                                                                        Từ chối
-                                                                    </button>
-                                                                    <button type="button" onClick={handleApprove} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
-                                                                        Chấp nhận
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                )}
-
-
-
-                                                {/* <Link href="/account/exitRequestForm">
-                                                    <div className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                                        <FontAwesomeIcon icon={faEye} />
-                                                    </div>
-
-                                                </Link> */}
-                                                <button
-                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                            {currentItems.map((leave, index) => (
+                                <tr key={index}>
+                                    <td className="border px-4 py-2">{leave.name}</td>
+                                    <td className="border px-4 py-2">{leave.username}</td>
+                                    <td className="border px-4 py-2">{leave.email}</td>
+                                    <td className="border px-4 py-2">{leave.phone}</td>
+                                    <td className="border px-4 py-2">
+                                        <div className="flex items-center justify-between">
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                                <FontAwesomeIcon icon={faEye}/>
+                                            </button>
+                                            <button
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                <FontAwesomeIcon icon={faTrash}/>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
@@ -339,7 +204,7 @@ const handleReject = () => {
                             onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)}
                             disabled={currentPage === 1}
                         >
-                            <FontAwesomeIcon icon={faArrowLeft} />
+                            <FontAwesomeIcon icon={faArrowLeft}/>
                         </button>
                         {pageNumbers.map((number) => (
                             <button
@@ -355,7 +220,7 @@ const handleReject = () => {
                             onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : currentPage)}
                             disabled={currentPage === pageNumbers.length}
                         >
-                            <FontAwesomeIcon icon={faArrowRight} />
+                            <FontAwesomeIcon icon={faArrowRight}/>
                         </button>
                     </div>
                 </div>
