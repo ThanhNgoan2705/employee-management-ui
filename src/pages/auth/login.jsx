@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { toast, ToastContainer, Zoom } from 'react-toastify';
+import {useEffect, useState} from "react";
+import {toast, ToastContainer, Zoom} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
+import {Layout} from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -29,7 +30,7 @@ export default function Login() {
         try {
             const response = await fetch("http://127.0.0.1:8080/users/login", {
                 method: "POST",
-                headers: { 'content-type': 'application/json' },
+                headers: {'content-type': 'application/json'},
                 body: JSON.stringify(loginDTO)
             });
 
@@ -64,8 +65,6 @@ export default function Login() {
     };
 
 
-
-
     const validate = () => {
         let result = true;
 
@@ -94,53 +93,57 @@ export default function Login() {
     };
     return (
         <>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
-                    <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
-                    <input
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        type="name"
-                        placeholder="Username"
-                        className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
+            <Layout>
+                <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                    <form
+                        className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
+                        <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
+                        <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="name"
+                            placeholder="Username"
+                            className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
 
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
-                    // type="email"
-                    // placeholder="Email"
-                    />
-                    <input
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
-                        type="password"
-                        placeholder="Password"
-                    />
-                    <button
-                        type="submit"
-                        className="w-full p-4 mb-4 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg"
-                        onClick={ProceedLogin}
-                    >
-                        Login
-                    </button>
-                    <p className="text-sm opacity-50">
-                        Don't have an account?{" "}
-                        <a href="#" className="text-blue-500">
-                            Sign up
-                        </a>
-                    </p>
-                </form>
-                <ToastContainer
-                    className="toast-container"
-                    toastClassName="toast"
-                    bodyClassName="toast-body"
-                    progressClassName="toast-progress"
-                    theme='colored'
-                    transition={Zoom}
-                    autoClose={5}
-                    hideProgressBar={true}
-                ></ToastContainer>
-            </main>
+                            // value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            // type="email"
+                            // placeholder="Email"
+                        />
+                        <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
+                            type="password"
+                            placeholder="Password"
+                        />
+                        <button
+                            type="submit"
+                            className="w-full p-4 mb-4 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg"
+                            onClick={ProceedLogin}
+                        >
+                            Login
+                        </button>
+                        <p className="text-sm opacity-50">
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
+                            Don't have an account?{" "}
+                            <a href="#" className="text-blue-500">
+                                Sign up
+                            </a>
+                        </p>
+                    </form>
+                    <ToastContainer
+                        className="toast-container"
+                        toastClassName="toast"
+                        bodyClassName="toast-body"
+                        progressClassName="toast-progress"
+                        theme='colored'
+                        transition={Zoom}
+                        autoClose={5}
+                        hideProgressBar={true}
+                    ></ToastContainer>
+                </main>
+            </Layout>
         </>
     );
 }
