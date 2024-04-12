@@ -47,7 +47,7 @@ export default function Login() {
                         sessionStorage.setItem('username', resq.data.username);// Lưu giá trị từ biến state `username`
 
                         // Store JSON Data
-                        let dataConvertString = JSON.stringify(resq.data);// convert string to object 
+                        let dataConvertString = JSON.stringify(resq.data);// convert string to object
                         sessionStorage.setItem('userInfo', dataConvertString);
 
                         let name = sessionStorage.getItem('username');
@@ -95,54 +95,56 @@ export default function Login() {
     };
     return (
         <>
-        <Layout>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
-                    <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
-                    <input
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        type="name"
-                        placeholder="Username"
-                        className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
+            <Layout>
+                <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                    <form id="yourFormId"
+                          className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
+                        <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
+                        <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="name"
+                            placeholder="Username"
+                            className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
 
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
-                    // type="email"
-                    // placeholder="Email"
-                    />
-                    <input
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
-                        type="password"
-                        placeholder="Password"
-                    />
-                    <button
-                        type="submit"
-                        className="w-full p-4 mb-4 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg"
-                        onClick={ProceedLogin}
-                    >
-                        Login
-                    </button>
-                    <p className="text-sm opacity-50">
-                        Don't have an account?{" "}
-                        <a href="#" className="text-blue-500">
-                            Sign up
-                        </a>
-                    </p>
-                </form>
-                <ToastContainer
-                    className="toast-container"
-                    toastClassName="toast"
-                    bodyClassName="toast-body"
-                    progressClassName="toast-progress"
-                    theme='colored'
-                    transition={Zoom}
-                    autoClose={5}
-                    hideProgressBar={true}
-                ></ToastContainer>
-            </main>
+                            // value={email}
+                            // onChange={(e) => setEmail(e.target.value)}
+                            // type="email"
+                            // placeholder="Email"
+                        />
+                        <input
+                            value={pass}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
+                            type="password"
+                            placeholder="Password"
+                        />
+                        <button
+                            type="submit"
+                            className="w-full p-4 mb-4 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg"
+                            onClick={ProceedLogin}
+                        >
+                            Login
+                        </button>
+                        <p className="text-sm opacity-50">
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
+                            Don't have an account?{" "}
+                            <a href="#" className="text-blue-500">
+                                Sign up
+                            </a>
+                        </p>
+                    </form>
+                    <ToastContainer
+                        className="toast-container"
+                        toastClassName="toast"
+                        bodyClassName="toast-body"
+                        progressClassName="toast-progress"
+                        theme='colored'
+                        transition={Zoom}
+                        autoClose={5}
+                        hideProgressBar={true}
+                    ></ToastContainer>
+                </main>
             </Layout>
         </>
     );
