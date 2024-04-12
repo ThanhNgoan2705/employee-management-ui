@@ -1,13 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
-import { toast, ToastContainer, Zoom } from 'react-toastify';
+import {useEffect, useState} from "react";
+import {toast, ToastContainer, Zoom} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/navigation'
-import { Layout } from "@/components/account";
+import {useRouter} from 'next/navigation'
+import {Layout} from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [pass, setPassword] = useState('');
     // const [email, setEmail] = useState("");
     const router = useRouter();
 
@@ -24,47 +24,40 @@ export default function Login() {
         }
         const loginDTO = {
             username: username,
-            password: password
+            pass: pass
             // email:email
         };
+        // Log the username and password
+        console.log('Username:', username);
+        console.log('Password:', pass);
         try {
-            const response = await fetch("http://127.0.0.1:8080/users/login", {
+            const response = await fetch("http://localhost:8081/api/login", {
                 method: "POST",
-                headers: { 'content-type': 'application/json' },
+                headers: {'content-type': 'application/json'},
                 body: JSON.stringify(loginDTO)
             });
-
-            console.log(response);
-            if (response.ok) {// có dữ liệu trả về
-                if (response.status === 400) {
-                    //
-                } else if (response.status === 401) {
-                    //
-                } else if (response.status === 200) {
-                    //
-                    const resq = await response.json();
-                    if (resq.status === 1) {
-                        sessionStorage.setItem('username', resq.data.username);// Lưu giá trị từ biến state `username`
-
-                        // Store JSON Data
-                        let dataConvertString = JSON.stringify(resq.data);// convert string to object
-                        sessionStorage.setItem('userInfo', dataConvertString);
-
-                        let name = sessionStorage.getItem('username');
-                        console.log(name); // In ra giá trị username đã lưu trữ trong phiên làm việc
-                        console.log("thành công");
-                        router.push('/');
-                    } else {
-                        toast.error(resq.message); // Hiển thị thông báo lỗi từ API trong giao diện
-                    }
+            console.log("response" + response.status);
+            const userId = await response.json();
+            if (response.status === 200) {
+                if (userId !== null) {
+                    sessionStorage.setItem('userId', userId.id);
+                    const response = await fetch(`http://localhost:8081/api/employees/${userId}`, {
+                        method: "GET",
+                        headers: {'content-type': 'application/json'}
+                    });
+                    const userInfo = await response.json();
+                    console.log(userInfo);
+                    let dataConvertString = JSON.stringify(userInfo);
+                    sessionStorage.setItem('userInfo', dataConvertString);
                 }
+                router.push('/account/leaveList');
+            } else {
+                toast.error('Failed: ' + response.status); // Hiển thị thông báo lỗi trong giao diện
             }
         } catch (err) {
             toast.error('Failed: ' + err.message); // Hiển thị thông báo lỗi trong giao diện
         }
     };
-
-
 
 
     const validate = () => {
@@ -73,24 +66,18 @@ export default function Login() {
         if (username === '' || username === null) {
             result = false;
             console.log('Please Enter Username');
-        } else if (username.length !== 8) {
-            result = false;
-            console.log('Please Enter a Username with exactly 8 characters');
         } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
             result = false;
             console.log('Please Enter a Username with only alphanumeric characters');
         }
-        if (password === '' || password === null) {
+        if (pass === '' || pass === null) {
             result = false;
             console.log('Please Enter Password');
         }
-        // if (email === '' || email === null) {
-        //     toast.warning('Please enter Email');
-        //     return false;
-        // } if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-        //     toast.warning('Please enter a valid email');
-        //     return false;
-        // }
+        if (pass.length < 8) {
+            result = false;
+            console.log('Password must be at least 6 characters long');
+        }
         return result;
     };
     return (
@@ -106,11 +93,6 @@ export default function Login() {
                             type="name"
                             placeholder="Username"
                             className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
-
-                            // value={email}
-                            // onChange={(e) => setEmail(e.target.value)}
-                            // type="email"
-                            // placeholder="Email"
                         />
                         <input
                             value={pass}
