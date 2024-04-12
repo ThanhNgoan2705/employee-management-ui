@@ -1,9 +1,9 @@
 "use client";
-import {useEffect, useState} from "react";
-import {toast, ToastContainer, Zoom} from 'react-toastify';
+import { useEffect, useState } from "react";
+import { toast, ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useRouter} from 'next/navigation'
-import {Layout} from "@/components/account";
+import { useRouter } from 'next/navigation'
+import { Layout } from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
