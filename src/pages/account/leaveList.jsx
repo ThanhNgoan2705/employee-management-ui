@@ -1,9 +1,8 @@
-import { Layout } from "@/components/account";
-import { useEffect, useState } from "react";
-import { Nav } from "@/components/Nav.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
-import Link from 'next/link';
+import {Layout} from "@/components/account";
+import {useEffect, useState} from "react";
+import {Nav} from "@/components/Nav.jsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 
 export default function LeaveList() {
     const [leaveList, setLeaveList] = useState([]);
