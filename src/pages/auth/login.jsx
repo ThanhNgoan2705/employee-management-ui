@@ -53,7 +53,7 @@ export default function Login() {
                         let name = sessionStorage.getItem('username');
                         console.log(name); // In ra giá trị username đã lưu trữ trong phiên làm việc
                         console.log("thành công");
-                        router.push('/account/leaveList');
+                        router.push('/');
                     } else {
                         toast.error(resq.message); // Hiển thị thông báo lỗi từ API trong giao diện
                     }
@@ -73,11 +73,10 @@ export default function Login() {
         if (username === '' || username === null) {
             result = false;
             console.log('Please Enter Username');
-        }
-        if (username.length >= 8) {
+        } else if (username.length !== 8) {
             result = false;
             console.log('Please Enter a Username with exactly 8 characters');
-        } if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
             result = false;
             console.log('Please Enter a Username with only alphanumeric characters');
         }
@@ -85,12 +84,6 @@ export default function Login() {
             result = false;
             console.log('Please Enter Password');
         }
-        if (password.length >= 8) {
-            result = false;
-            console.log('Please Enter a password with exactly 8 characters');
-        }
-
-
         // if (email === '' || email === null) {
         //     toast.warning('Please enter Email');
         //     return false;
@@ -100,8 +93,6 @@ export default function Login() {
         // }
         return result;
     };
-
-
     return (
         <>
             <Layout>

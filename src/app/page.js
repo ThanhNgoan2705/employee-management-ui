@@ -14,7 +14,7 @@ export default function Home() {
                 width={700}
                 height={600}
             />
-            <Link href={'/account/login'}>
+            <Link href={'/auth/login'}>
                 <btn className="w-full px-8 py-4 mt-14 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg">
                     Login to Continue <FontAwesomeIcon icon={faArrowRightToBracket} />
                 </btn>

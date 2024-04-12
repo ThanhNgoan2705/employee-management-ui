@@ -7,6 +7,16 @@ export {Nav};
 function Nav() {
     const [currentPage, setcurrentPage] = useState('leaveList');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    const handleStartDateChange = (newStartDate) => {
+        setStartDate(newStartDate);
+    };
+
+    const handleEndDateChange = (newEndDate) => {
+        setEndDate(newEndDate);
+    };
 
     const openPopup = () => setIsPopupOpen(true);
     const closePopup = () => setIsPopupOpen(false);
@@ -34,19 +44,22 @@ function Nav() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (!startDate || !endDate) {
+        if (!value.startDate || !value.endDate) {
             // Hiển thị cảnh báo nếu ngày không được chọn
             alert("Vui lòng chọn ngày nghỉ trước khi gửi!");
             return;
         } else {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
+            const start = new Date(value.startDate);
+            const end = new Date(value.endDate);
             const duration = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
 
-            console.log(duration);
             const requestData = {
-                startDate: startDate,
-                endDate: endDate,
+                id: requestId,
+                fullName: formData.fullName,
+                department: formData.department,
+                role: formData.role,
+                // leaveDates: value, // thời gian ngày bd đến kt
+                leaveDuration: duration,
                 reason: event.target.reason.value,
             };
             console.log(requestData);
@@ -71,40 +84,21 @@ function Nav() {
             // .catch(error => console.error('Lỗi:', error));
             closePopup();
             alert("Bạn đã gửi đơn đăng ký thành công")
-            setStartDate("")
-            setEndDate("")
-
+            setValue({
+                startDate: null,
+                endDate: null,
+            });
         }
     };
 
-    const [startDate, setStartDate] = useState('');
-    const handleStartDateChange = (event) => {
-        const selectedDate = event.target.value;
-        const today = new Date();
-        const selected = new Date(selectedDate);
-
-        if (selected < today) {
-            alert('Bạn không thể chọn ngày đã kết thúc.');
-        } else {
-            setStartDate(selectedDate);
-        }
+    const [value, setValue] = useState({
+        startDate: null,
+        endDate: null,
+    });
+    const handleValueChange = (newValue) => {
+        console.log("newValue:", newValue);
+        setValue(newValue);
     };
-    const [endDate, setEndDate] = useState('');
-    const handleEndDateChange = (event) => {
-        const selectedDate = event.target.value;
-        const today = new Date();
-        const selected = new Date(selectedDate);
-
-        if (selected < today) {
-            alert('Bạn không thể chọn ngày đã kết thúc.');
-        } else if (selected < new Date(startDate)) {
-            alert('Ngày kết thúc phải sau ngày bắt đầu.');
-        } else {
-            setEndDate(selectedDate);
-        }
-    };
-
-
     const closePopupWithConfirmation = () => {
         const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
         if (isConfirmed) {
@@ -139,7 +133,7 @@ function Nav() {
                 id="nav-content"
                 className="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
             >
-                <div className="text-sm lg:flex-grow justify-between">
+                <div className="text-sm lg:flex-grow">
                     <a
                         href="/"
                         className={`block mt-4 lg:inline-block lg:mt-0 ${currentPage === 'home' ? 'text-white' : 'text-teal-200'} hover:text-white font-semibold  mr-4`}
@@ -172,9 +166,9 @@ function Nav() {
                 </div>
                 {isPopupOpen && (
                     <div className="popup">
-                        <div className="popup-inner p-4 rounded-lg flex bg-blue-50 justify-center">
+                        <div className="popup-inner p-4 rounded-lg flex bg-blue-50">
                             <form onSubmit={handleSubmit}>
-                                <div className="form-group flex justify-between my-2">
+                                <div className="form-group flex justify-between m-4">
                                     <label htmlFor="fullName" className="my-auto">Họ tên:</label>
                                     <input
                                         type="text"
@@ -184,7 +178,7 @@ function Nav() {
                                         className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
                                     />
                                 </div>
-                                <div className="form-group flex justify-between my-2">
+                                <div className="form-group flex justify-between m-4">
                                     <label htmlFor="department" className="my-auto">Chức vụ:</label>
                                     <input
                                         type="text"
@@ -218,17 +212,17 @@ function Nav() {
                                     />
 
                                 </div>
-                                <div className="form-group flex justify-between my-2">
+                                <div className="form-group flex justify-between m-4">
                                     <label htmlFor="reason" className="my-auto">Lý do xin nghỉ:</label>
                                     <textarea
                                         id="reason"
                                         name="reason"
                                         rows="4"
-                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2 ml-16"
+                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
                                         maxLength={100}
                                     ></textarea>
                                 </div>
-                                <div className="form-buttons flex justify-center gap-4 pt-4">
+                                <div className="form-buttons flex justify-center gap-4">
                                     <button type="button" onClick={closePopupWithConfirmation}
                                             className="btn bg-red-500 px-4 py-2 rounded-lg text-white"> Hủy
                                     </button>
