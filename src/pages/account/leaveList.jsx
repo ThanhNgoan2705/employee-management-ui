@@ -8,7 +8,7 @@ export default function LeaveList() {
     const [leaveList, setLeaveList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
-
+    let leaveDaysLeft = 0;
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
@@ -29,8 +29,10 @@ export default function LeaveList() {
     return (
         <Layout>
             <Nav/>
-            <div className="flex bg-blue-50">
+            <div className="flex flex-row bg-blue-50 justify-between">
                 <h1 className="text-2xl font-semibold text-center">Leave List</h1>
+                <h3 className="text-xl font-semibold text-center ">You have <span className="text-red-600">{leaveDaysLeft}</span> days left for Day
+                    off</h3>
             </div>
             <div className="flex my-10 h-screen bg-blue-50 dark:bg-zinc-800">
                 <div className="container mx-auto">
