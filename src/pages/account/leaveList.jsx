@@ -3,7 +3,6 @@ import {useEffect, useState} from "react";
 import {Nav} from "@/components/Nav.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
-import Link from 'next/link';
 
 export default function LeaveList() {
     const [leaveList, setLeaveList] = useState([]);
@@ -39,6 +38,7 @@ export default function LeaveList() {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = leaveList.slice(indexOfFirstItem, indexOfLastItem);
+
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(leaveList.length / itemsPerPage); i++) {
         pageNumbers.push(i);
@@ -221,7 +221,6 @@ export default function LeaveList() {
 </div>
 </div>
 
-</Layout>
-)
-    ;
+        </Layout>
+    );
 }
