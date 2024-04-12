@@ -1,13 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
-import { toast, ToastContainer, Zoom } from 'react-toastify';
+import {useEffect, useState} from "react";
+import {toast, ToastContainer, Zoom} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter } from 'next/navigation'
-import { Layout } from "@/components/account";
+import {useRouter} from 'next/navigation'
+import {Layout} from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [pass, setPassword] = useState('');
     // const [email, setEmail] = useState("");
     const router = useRouter();
 
@@ -24,13 +24,16 @@ export default function Login() {
         }
         const loginDTO = {
             username: username,
-            password: password
+            pass: pass
             // email:email
         };
+        // Log the username and password
+        console.log('Username:', username);
+        console.log('Password:', pass);
         try {
-            const response = await fetch("http://127.0.0.1:8080/users/login", {
+            const response = await fetch("http://localhost:8081/api/login", {
                 method: "POST",
-                headers: { 'content-type': 'application/json' },
+                headers: {'content-type': 'application/json'},
                 body: JSON.stringify(loginDTO)
             });
             console.log("response" + response.status);
@@ -57,32 +60,24 @@ export default function Login() {
     };
 
 
-
-
     const validate = () => {
         let result = true;
 
         if (username === '' || username === null) {
             result = false;
             console.log('Please Enter Username');
-        } else if (username.length !== 8) {
-            result = false;
-            console.log('Please Enter a Username with exactly 8 characters');
         } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
             result = false;
             console.log('Please Enter a Username with only alphanumeric characters');
         }
-        if (password === '' || password === null) {
+        if (pass === '' || pass === null) {
             result = false;
             console.log('Please Enter Password');
         }
-        // if (email === '' || email === null) {
-        //     toast.warning('Please enter Email');
-        //     return false;
-        // } if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-        //     toast.warning('Please enter a valid email');
-        //     return false;
-        // }
+        if (pass.length < 8) {
+            result = false;
+            console.log('Password must be at least 6 characters long');
+        }
         return result;
     };
     return (
