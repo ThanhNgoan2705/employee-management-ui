@@ -40,15 +40,13 @@ export default function Login() {
             const userId = await response.json();
             if (response.status === 200) {
                 if (userId !== null) {
-                    sessionStorage.setItem('userId', userId.id);
+                    sessionStorage.setItem('userId', userId);
                     const response = await fetch(`http://localhost:8081/api/employees/${userId}`, {
                         method: "GET",
                         headers: {'content-type': 'application/json'}
                     });
                     const userInfo = await response.json();
                     console.log(userInfo);
-                    let dataConvertString = JSON.stringify(userInfo);
-                    sessionStorage.setItem('userInfo', dataConvertString);
                 }
                 router.push('/account/leaveList');
             } else {
@@ -74,9 +72,10 @@ export default function Login() {
             result = false;
             console.log('Please Enter Password');
         }
-        if (pass.length < 8) {
+        if (pass.length <8) {
             result = false;
-            console.log('Password must be at least 6 characters long');
+            console.log('Password must be at least 8 characters long');
+            alert('Password must be at least 8 characters long');
         }
         return result;
     };
