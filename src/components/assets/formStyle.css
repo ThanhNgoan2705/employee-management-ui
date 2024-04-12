@@ -15,20 +15,20 @@
     flex-direction: column;
 }
 
-.popup form label,
-.popup form input,
-.popup form textarea,
-.popup form button {
-    margin: 10px 0;
-}
+/*.popup form label,*/
+/*.popup form input,*/
+/*.popup form textarea,*/
+/*.popup form button {*/
+/*    margin: 10px 0;*/
+/*}*/
 
-.popup form button {
-    background-color: teal;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
+/*.popup form button {*/
+/*    background-color: teal;*/
+/*    color: white;*/
+/*    border: none;*/
+/*    padding: 10px;*/
+/*    cursor: pointer;*/
+/*}*/
 
 .popup form button:hover {
     background-color: darkcyan;
