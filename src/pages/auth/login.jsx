@@ -1,9 +1,9 @@
 "use client";
-import {useEffect, useState} from "react";
-import {toast, ToastContainer, Zoom} from 'react-toastify';
+import { useEffect, useState } from "react";
+import { toast, ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useRouter} from 'next/navigation'
-import {Layout} from "@/components/account";
+import { useRouter } from 'next/navigation'
+import { Layout } from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -30,7 +30,7 @@ export default function Login() {
         try {
             const response = await fetch("http://127.0.0.1:8080/users/login", {
                 method: "POST",
-                headers: {'content-type': 'application/json'},
+                headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(loginDTO)
             });
 
@@ -47,7 +47,7 @@ export default function Login() {
                         sessionStorage.setItem('username', resq.data.username);// Lưu giá trị từ biến state `username`
 
                         // Store JSON Data
-                        let dataConvertString = JSON.stringify(resq.data);// convert string to object 
+                        let dataConvertString = JSON.stringify(resq.data);// convert string to object
                         sessionStorage.setItem('userInfo', dataConvertString);
 
                         let name = sessionStorage.getItem('username');
@@ -63,6 +63,8 @@ export default function Login() {
             toast.error('Failed: ' + err.message); // Hiển thị thông báo lỗi trong giao diện
         }
     };
+
+
 
 
     const validate = () => {
@@ -95,8 +97,8 @@ export default function Login() {
         <>
             <Layout>
                 <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                    <form
-                        className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
+                    <form id="yourFormId"
+                          className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
                         <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
                         <input
                             value={username}
@@ -111,7 +113,7 @@ export default function Login() {
                             // placeholder="Email"
                         />
                         <input
-                            value={password}
+                            value={pass}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
                             type="password"

@@ -1,4 +1,5 @@
 "use client";
+import { Layout } from "@/components/account";
 import React, { useState, useEffect } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 
@@ -132,7 +133,8 @@ export default function LeaveRequestForm() {
 
     return (
         <>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <Layout>
+            <main className="flex min-h-screen flex-col items-center justify-between p-24"> */
                 <div className="relative place-items-center">
                     {/* {!isPopupOpen && ( */}
                     <button onClick={openPopup} className="open-popup-btn" data-toggle="modal" data-target="#exampleModal">
@@ -262,6 +264,7 @@ export default function LeaveRequestForm() {
                     )}
                 </div>
             </main>
+            </Layout>
         </>
     );
 }
