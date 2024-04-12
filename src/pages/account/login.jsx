@@ -73,11 +73,11 @@ export default function Login() {
         if (username === '' || username === null) {
             result = false;
             console.log('Please Enter Username');
-        } 
-        else if (username.length >= 8) {
+        }
+        if (username.length >= 8) {
             result = false;
             console.log('Please Enter a Username with exactly 8 characters');
-        } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
+        } if (!/^[a-zA-Z0-9]+$/.test(username)) {
             result = false;
             console.log('Please Enter a Username with only alphanumeric characters');
         }
@@ -85,6 +85,12 @@ export default function Login() {
             result = false;
             console.log('Please Enter Password');
         }
+        if (password.length >= 8) {
+            result = false;
+            console.log('Please Enter a password with exactly 8 characters');
+        }
+
+
         // if (email === '' || email === null) {
         //     toast.warning('Please enter Email');
         //     return false;
@@ -94,56 +100,59 @@ export default function Login() {
         // }
         return result;
     };
+
+
     return (
         <>
-        <Layout>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
-                    <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
-                    <input
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        type="name"
-                        placeholder="Username"
-                        className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
+            <Layout>
+                <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                    <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
+                        <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
+                        <input
+                            name="username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="name"
+                            placeholder="Username"
+                            className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
 
-                    // value={email}
-                    // onChange={(e) => setEmail(e.target.value)}
-                    // type="email"
-                    // placeholder="Email"
-                    />
-                    <input
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
-                        type="password"
-                        placeholder="Password"
-                    />
-                    <button
-                        type="submit"
-                        className="w-full p-4 mb-4 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg"
-                        onClick={ProceedLogin}
-                    >
-                        Login
-                    </button>
-                    <p className="text-sm opacity-50">
-                        Don't have an account?{" "}
-                        <a href="#" className="text-blue-500">
-                            Sign up
-                        </a>
-                    </p>
-                </form>
-                <ToastContainer
-                    className="toast-container"
-                    toastClassName="toast"
-                    bodyClassName="toast-body"
-                    progressClassName="toast-progress"
-                    theme='colored'
-                    transition={Zoom}
-                    autoClose={5}
-                    hideProgressBar={true}
-                ></ToastContainer>
-            </main>
+                        // value={email}
+                        // onChange={(e) => setEmail(e.target.value)}
+                        // type="email"
+                        // placeholder="Email"
+                        />
+                        <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
+                            type="password"
+                            placeholder="Password"
+                        />
+                        <button
+                            type="submit"
+                            className="w-full p-4 mb-4 text-white bg-gradient-to-r from-sky-500 to-blue-500 rounded-lg"
+                            onClick={ProceedLogin}
+                        >
+                            Login
+                        </button>
+                        <p className="text-sm opacity-50">
+                            Don't have an account?{" "}
+                            <a href="#" className="text-blue-500">
+                                Sign up
+                            </a>
+                        </p>
+                    </form>
+                    <ToastContainer
+                        className="toast-container"
+                        toastClassName="toast"
+                        bodyClassName="toast-body"
+                        progressClassName="toast-progress"
+                        theme='colored'
+                        transition={Zoom}
+                        autoClose={5}
+                        hideProgressBar={true}
+                    ></ToastContainer>
+                </main>
             </Layout>
         </>
     );
