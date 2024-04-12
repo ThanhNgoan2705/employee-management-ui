@@ -53,7 +53,7 @@ export default function Login() {
                         let name = sessionStorage.getItem('username');
                         console.log(name); // In ra giá trị username đã lưu trữ trong phiên làm việc
                         console.log("thành công");
-                        router.push('/account/leaveList');
+                        router.push('/');
                     } else {
                         toast.error(resq.message); // Hiển thị thông báo lỗi từ API trong giao diện
                     }
@@ -73,8 +73,7 @@ export default function Login() {
         if (username === '' || username === null) {
             result = false;
             console.log('Please Enter Username');
-        } 
-        else if (username.length >= 8) {
+        } else if (username.length !== 8) {
             result = false;
             console.log('Please Enter a Username with exactly 8 characters');
         } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
