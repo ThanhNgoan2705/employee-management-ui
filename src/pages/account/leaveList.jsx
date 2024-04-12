@@ -1,6 +1,6 @@
 import {Layout} from "@/components/account";
 import {useEffect, useState} from "react";
-import {Nav} from "@/components/Nav";
+import {Nav} from "@/components/Nav.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 
@@ -38,7 +38,7 @@ export default function LeaveList() {
                         <table className="table-auto w-full justify-center items-center text-center">
                             <thead>
                             <tr>
-                                <th className='w-1.5'>type</th>
+                                <th className='w-1.5'>id</th>
                                 <th className='w-1.5'>from</th>
                                 <th className='w-1.5'>to</th>
                                 <th className='w-1.5'>status</th>

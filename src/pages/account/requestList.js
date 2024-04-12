@@ -1,8 +1,9 @@
 import {Layout} from "@/components/account";
 import {useEffect, useState} from "react";
-import {Nav} from "@/components/Nav";
+import {Nav} from "@/components/Nav.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
+import Datepicker from "react-tailwindcss-datepicker";
 
 export default function LeaveList() {
     const [leaveList, setLeaveList] = useState([]);
@@ -25,6 +26,94 @@ export default function LeaveList() {
     for (let i = 1; i <= Math.ceil(leaveList.length / itemsPerPage); i++) {
         pageNumbers.push(i);
     }
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const openPopup = () => setIsPopupOpen(true);
+    const closePopup = () => setIsPopupOpen(false);
+    const [formData, setFormData] = useState({
+        fullName: "",
+        department: "",
+        role: "",
+    });
+    const [requestId, setRequestId] = useState(1);
+    useEffect(() => {
+        // Mock API giả
+        fetch("https://jsonplaceholder.typicode.com/users/1")
+            .then((response) => response.json())
+            .then((data) => {
+                // Set data to form fields
+                setFormData({
+                    fullName: data.name,
+                    department: data.company.name,
+                    role: data.company.catchPhrase,
+                });
+            })
+            .catch((error) => console.error("Error fetching data:", error));
+    }, []);
+    // Nhấn gửi đơn
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (!value.startDate || !value.endDate) {
+            // Hiển thị cảnh báo nếu ngày không được chọn
+            alert("Vui lòng chọn ngày nghỉ trước khi gửi!");
+            return;
+        } else {
+            const start = new Date(value.startDate);
+            const end = new Date(value.endDate);
+            const duration = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+            const requestData = {
+                id: requestId,
+                fullName: formData.fullName,
+                department: formData.department,
+                role: formData.role,
+                // leaveDates: value, // thời gian ngày bd đến kt
+                leaveDuration: duration,
+                reason: event.target.reason.value,
+            };
+            console.log(requestData);
+            setRequestId(requestId + 1);
+            // Gửi dữ liệu
+            // fetch('URL của API', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(requestData)
+            // })
+            // .then(response => {
+            //     if (response.ok) {
+            //         console.log('Dữ liệu đã được gửi thành công!');
+            //         // Thực hiện các hành động khác (ví dụ: hiển thị thông báo)
+            //     } else {
+            //         console.error('Đã xảy ra lỗi khi gửi dữ liệu.');
+            //         // Xử lý lỗi nếu cần
+            //     }
+            // })
+            // .catch(error => console.error('Lỗi:', error));
+            closePopup();
+            alert("Bạn đã gửi đơn đăng ký thành công")
+            setValue({
+                startDate: null,
+                endDate: null,
+            });
+        }
+    };
+
+    const [value, setValue] = useState({
+        startDate: null,
+        endDate: null,
+    });
+    const handleValueChange = (newValue) => {
+        console.log("newValue:", newValue);
+        setValue(newValue);
+    };
+    const closePopupWithConfirmation = () => {
+        const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
+        if (isConfirmed) {
+            closePopup();
+        }
+    };
 
     return (
         <Layout>
