@@ -40,15 +40,13 @@ export default function Login() {
             const userId = await response.json();
             if (response.status === 200) {
                 if (userId !== null) {
-                    sessionStorage.setItem('userId', userId.id);
+                    sessionStorage.setItem('userId', userId);
                     const response = await fetch(`http://localhost:8081/api/employees/${userId}`, {
                         method: "GET",
                         headers: {'content-type': 'application/json'}
                     });
                     const userInfo = await response.json();
                     console.log(userInfo);
-                    let dataConvertString = JSON.stringify(userInfo);
-                    sessionStorage.setItem('userInfo', dataConvertString);
                 }
                 router.push('/account/leaveList');
             } else {
