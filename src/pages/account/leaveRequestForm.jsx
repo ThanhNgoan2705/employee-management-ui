@@ -1,30 +1,30 @@
 // Trang gọi cái này phải có : "use client";
-
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import Datepicker from "react-tailwindcss-datepicker";
+import {Layout} from "@/components/account";
 export default function LeaveRequestForm() {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const openPopup = () => setIsPopupOpen(true);
     const closePopup = () => setIsPopupOpen(false);
     const [formData, setFormData] = useState({
-    fullName: "",
-    department: "",
-    role: "",
+        fullName: "",
+        department: "",
+        role: "",
     });
     const [requestId, setRequestId] = useState(1);
     useEffect(() => {
-    // Mock API giả
-    fetch("https://jsonplaceholder.typicode.com/users/1")
-        .then((response) => response.json())
-        .then((data) => {
-        // Set data to form fields
-        setFormData({
-            fullName: data.name,
-            department: data.company.name,
-            role: data.company.catchPhrase,
-            });
-        })
-        .catch((error) => console.error("Error fetching data:", error));
+        // Mock API giả
+        fetch("https://jsonplaceholder.typicode.com/users/1")
+            .then((response) => response.json())
+            .then((data) => {
+                // Set data to form fields
+                setFormData({
+                    fullName: data.name,
+                    department: data.company.name,
+                    role: data.company.catchPhrase,
+                });
+            })
+            .catch((error) => console.error("Error fetching data:", error));
     }, []);
     // Nhấn gửi đơn
     const handleSubmit = (event) => {
@@ -34,7 +34,7 @@ export default function LeaveRequestForm() {
             // Hiển thị cảnh báo nếu ngày không được chọn
             alert("Vui lòng chọn ngày nghỉ trước khi gửi!");
             return;
-        }else{
+        } else {
             const start = new Date(value.startDate);
             const end = new Date(value.endDate);
             const duration = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
@@ -68,7 +68,7 @@ export default function LeaveRequestForm() {
             //     }
             // })
             // .catch(error => console.error('Lỗi:', error));
-            closePopup(); 
+            closePopup();
             alert("Bạn đã gửi đơn đăng ký thành công")
             setValue({
                 startDate: null,
@@ -88,12 +88,12 @@ export default function LeaveRequestForm() {
     const closePopupWithConfirmation = () => {
         const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
         if (isConfirmed) {
-        closePopup(); 
+            closePopup();
         }
     };
     return (
-        <>
-            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <Layout>
+            <div className="flex bg-blue-50">
                 <div className="relative place-items-center">
                     {!isPopupOpen && (
                         <button onClick={openPopup} className="open-popup-btn">Mở Đơn Xin Nghỉ</button>
@@ -137,13 +137,14 @@ export default function LeaveRequestForm() {
                                     </div>
                                     <div className="form-group flex justify-between m-4">
                                         <label htmlFor="leaveDates" className="my-auto">Chọn ngày nghỉ:</label>
-                                        <div className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
+                                        <div
+                                            className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
                                             <Datepicker
-                                            value={value}
-                                            onChange={handleValueChange}
-                                            showShortcuts={true}
-                                            dateFormat="dd/MM/yyyy"
-                                            style={{ outline: "none", backgroundColor: "#d1d5db" }}
+                                                value={value}
+                                                onChange={handleValueChange}
+                                                showShortcuts={true}
+                                                dateFormat="dd/MM/yyyy"
+                                                style={{outline: "none", backgroundColor: "#d1d5db"}}
                                             />
                                         </div>
                                     </div>
@@ -158,15 +159,19 @@ export default function LeaveRequestForm() {
                                         ></textarea>
                                     </div>
                                     <div className="form-buttons flex justify-center gap-4">
-                                        <button type="button" onClick={closePopupWithConfirmation} className="btn bg-red-500 px-4 py-2 rounded-lg text-white"> Hủy </button>
-                                        <button type="submit" className="btn bg-blue-500 px-4 py-2 rounded-lg text-white" > Gửi </button>
+                                        <button type="button" onClick={closePopupWithConfirmation}
+                                                className="btn bg-red-500 px-4 py-2 rounded-lg text-white"> Hủy
+                                        </button>
+                                        <button type="submit"
+                                                className="btn bg-blue-500 px-4 py-2 rounded-lg text-white"> Gửi
+                                        </button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     )}
                 </div>
-            </main>
-        </>
+            </div>
+        </Layout>
     );
 }
