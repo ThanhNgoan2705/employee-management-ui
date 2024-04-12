@@ -7,23 +7,13 @@ export {Nav};
 function Nav() {
     const [currentPage, setcurrentPage] = useState('leaveList');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-
-    const handleStartDateChange = (newStartDate) => {
-        setStartDate(newStartDate);
-    };
-
-    const handleEndDateChange = (newEndDate) => {
-        setEndDate(newEndDate);
-    };
 
     const openPopup = () => setIsPopupOpen(true);
     const closePopup = () => setIsPopupOpen(false);
     const [formData, setFormData] = useState({
         fullName: "",
-        position: "",
-        reason: "",
+        department: "",
+        role: "",
     });
     const [requestId, setRequestId] = useState(1);
     useEffect(() => {
@@ -34,8 +24,8 @@ function Nav() {
                 // Set data to form fields
                 setFormData({
                     fullName: data.name,
-                    position: data.company.name,
-                    reason: data.company.catchPhrase,
+                    department: data.company.name,
+                    role: data.company.catchPhrase,
                 });
             })
             .catch((error) => console.error("Error fetching data:", error));
@@ -141,7 +131,6 @@ function Nav() {
                     >
                         Home
                     </a>
-                    {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                     <a
                         href="/account/leaveList"
                         className={`block mt-4 lg:inline-block lg:mt-0 ${currentPage === 'leaveList' ? 'text-white' : 'text-teal-200'} hover:text-white font-semibold mr-4`}
@@ -149,7 +138,6 @@ function Nav() {
                     >
                         Leave List
                     </a>
-                    {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
                     <a
                         href="/account/requestList"
                         className={`block mt-4 lg:inline-block lg:mt-0 ${currentPage === 'requestList' ? 'text-white' : 'text-teal-200'} hover:text-white font-semibold mr-4`}
@@ -186,29 +174,33 @@ function Nav() {
                                         type="text"
                                         id="role"
                                         name="role"
-                                        value={formData.position}
-                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                        value={formData.role}
+                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2 ml-16"
                                     />
                                 </div>
-                                <div className="form-group flex justify-between m-4">
-                                    <label htmlFor="startDate" className="my-auto">From:</label>
-                                    <div
-                                        className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
-                                        <Datepicker
-                                            value={startDate}
-                                            onChange={handleStartDateChange}
-                                            showShortcuts={true}
-                                            dateFormat="dd/MM/yyyy"
-                                            classNames="w-full p-2 text-black "
-                                            style={{outline: "none"}}
-                                        />
-                                    </div>
+                                <div className="form-group flex justify-between my-2">
+                                    <label htmlFor="leaveDates" className="my-auto">Ngày bắt đầu: </label>
+
+                                    <input
+                                        type="date"
+                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2 ml-16"
+                                        style={{ outline: "none" }}
+                                        value={startDate} // Đặt giá trị của input bằng giá trị của trạng thái
+                                        onChange={handleStartDateChange}
+                                    />
+
                                 </div>
-                                <label htmlFor="endDate" className="my-auto">To:</label>
-                                <div className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
-                                    <Datepicker value={endDate} onChange={handleEndDateChange}
-                                                showShortcuts={true} dateFormat="dd/MM/yyyy"
-                                                classNames="w-full p-2 text-black " style={{outline: "none"}}/>
+                                <div className="form-group flex justify-between my-2">
+                                    <label htmlFor="leaveDates" className="my-auto">Ngày kết thúc: </label>
+
+                                    <input
+                                        type="date"
+                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2 ml-16"
+                                        style={{ outline: "none" }}
+                                        value={endDate} // Đặt giá trị của input bằng giá trị của trạng thái
+                                        onChange={handleEndDateChange}
+                                    />
+
                                 </div>
                                 <div className="form-group flex justify-between m-4">
                                     <label htmlFor="reason" className="my-auto">Lý do xin nghỉ:</label>
