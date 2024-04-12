@@ -127,6 +127,7 @@ export default function Login() {
                             Login
                         </button>
                         <p className="text-sm opacity-50">
+                            {/* eslint-disable-next-line react/no-unescaped-entities */}
                             Don't have an account?{" "}
                             <a href="#" className="text-blue-500">
                                 Sign up
