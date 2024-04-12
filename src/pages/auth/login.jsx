@@ -7,7 +7,7 @@ import { Layout } from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const [pass, setPassword] = useState('');
     // const [email, setEmail] = useState("");
     const router = useRouter();
 
@@ -31,26 +31,11 @@ export default function Login() {
         console.log('Username:', username);
         console.log('Password:', pass);
         try {
-            const response = await fetch("http://127.0.0.1:8080/users/login", {
+            const response = await fetch("http://localhost:8081/api/login", {
                 method: "POST",
-                headers: { 'content-type': 'application/json' },
+                headers: {'content-type': 'application/json'},
                 body: JSON.stringify(loginDTO)
             });
-            console.log("response" + response.status);
-            const userId = await response.json();
-            if (response.status === 200) {
-                if (userId !== null) {
-                    sessionStorage.setItem('userId', userId);
-                    const response = await fetch(`http://localhost:8081/api/employees/${userId}`, {
-                        method: "GET",
-                        headers: {'content-type': 'application/json'}
-                    });
-                    const userInfo = await response.json();
-                    console.log(userInfo);
-                }
-                router.push('/account/leaveList');
-            } else {
-                toast.error('Failed: ' + response.status); // Hiển thị thông báo lỗi trong giao diện
             console.log("response" + response.status);
             const userId = await response.json();
             if (response.status === 200) {
@@ -89,9 +74,10 @@ export default function Login() {
             result = false;
             console.log('Please Enter Password');
         }
-        if (pass.length < 8) {
+        if (pass.length <8) {
             result = false;
-            console.log('Password must be at least 6 characters long');
+            console.log('Password must be at least 8 characters long');
+            alert('Password must be at least 8 characters long');
         }
         return result;
     };
@@ -108,11 +94,6 @@ export default function Login() {
                             type="name"
                             placeholder="Username"
                             className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
-
-                            // value={email}
-                            // onChange={(e) => setEmail(e.target.value)}
-                            // type="email"
-                            // placeholder="Email"
                         />
                         <input
                             value={pass}
