@@ -34,22 +34,19 @@ function Nav() {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (!value.startDate || !value.endDate) {
+        if (!startDate || !endDate) {
             // Hiển thị cảnh báo nếu ngày không được chọn
             alert("Vui lòng chọn ngày nghỉ trước khi gửi!");
             return;
         } else {
-            const start = new Date(value.startDate);
-            const end = new Date(value.endDate);
+            const start = new Date(startDate);
+            const end = new Date(endDate);
             const duration = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
 
+            console.log(duration);
             const requestData = {
-                id: requestId,
-                fullName: formData.fullName,
-                department: formData.department,
-                role: formData.role,
-                // leaveDates: value, // thời gian ngày bd đến kt
-                leaveDuration: duration,
+                startDate: startDate,
+                endDate: endDate,
                 reason: event.target.reason.value,
             };
             console.log(requestData);
@@ -74,21 +71,40 @@ function Nav() {
             // .catch(error => console.error('Lỗi:', error));
             closePopup();
             alert("Bạn đã gửi đơn đăng ký thành công")
-            setValue({
-                startDate: null,
-                endDate: null,
-            });
+            setStartDate("")
+            setEndDate("")
+
         }
     };
 
-    const [value, setValue] = useState({
-        startDate: null,
-        endDate: null,
-    });
-    const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
-        setValue(newValue);
+    const [startDate, setStartDate] = useState('');
+    const handleStartDateChange = (event) => {
+        const selectedDate = event.target.value;
+        const today = new Date();
+        const selected = new Date(selectedDate);
+
+        if (selected < today) {
+            alert('Bạn không thể chọn ngày đã kết thúc.');
+        } else {
+            setStartDate(selectedDate);
+        }
     };
+    const [endDate, setEndDate] = useState('');
+    const handleEndDateChange = (event) => {
+        const selectedDate = event.target.value;
+        const today = new Date();
+        const selected = new Date(selectedDate);
+
+        if (selected < today) {
+            alert('Bạn không thể chọn ngày đã kết thúc.');
+        } else if (selected < new Date(startDate)) {
+            alert('Ngày kết thúc phải sau ngày bắt đầu.');
+        } else {
+            setEndDate(selectedDate);
+        }
+    };
+
+
     const closePopupWithConfirmation = () => {
         const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
         if (isConfirmed) {
@@ -123,7 +139,7 @@ function Nav() {
                 id="nav-content"
                 className="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
             >
-                <div className="text-sm lg:flex-grow">
+                <div className="text-sm lg:flex-grow justify-between">
                     <a
                         href="/"
                         className={`block mt-4 lg:inline-block lg:mt-0 ${currentPage === 'home' ? 'text-white' : 'text-teal-200'} hover:text-white font-semibold  mr-4`}
@@ -156,9 +172,9 @@ function Nav() {
                 </div>
                 {isPopupOpen && (
                     <div className="popup">
-                        <div className="popup-inner p-4 rounded-lg flex bg-blue-50">
+                        <div className="popup-inner p-4 rounded-lg flex bg-blue-50 justify-center">
                             <form onSubmit={handleSubmit}>
-                                <div className="form-group flex justify-between m-4">
+                                <div className="form-group flex justify-between my-2">
                                     <label htmlFor="fullName" className="my-auto">Họ tên:</label>
                                     <input
                                         type="text"
@@ -168,41 +184,51 @@ function Nav() {
                                         className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
                                     />
                                 </div>
-                                <div className="form-group flex justify-between m-4">
+                                <div className="form-group flex justify-between my-2">
                                     <label htmlFor="department" className="my-auto">Chức vụ:</label>
                                     <input
                                         type="text"
                                         id="role"
                                         name="role"
                                         value={formData.role}
-                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2 ml-16"
                                     />
                                 </div>
-                                <div className="form-group flex justify-between m-4">
-                                    <label htmlFor="leaveDates" className="my-auto">Form- to</label>
-                                    <div
-                                        className="border-x border-y bor rounded-lg border-x-gray-300 border-y-gray-300">
-                                        <Datepicker
-                                            value={value}
-                                            onChange={handleValueChange}
-                                            showShortcuts={true}
-                                            dateFormat="dd/MM/yyyy"
-                                            classNames="w-full p-2 text-black "
-                                            style={{outline: "none"}}
-                                        />
-                                    </div>
+                                <div className="form-group flex justify-between my-2">
+                                    <label htmlFor="leaveDates" className="my-auto">Ngày bắt đầu: </label>
+
+                                    <input
+                                        type="date"
+                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2 ml-16"
+                                        style={{ outline: "none" }}
+                                        value={startDate} // Đặt giá trị của input bằng giá trị của trạng thái
+                                        onChange={handleStartDateChange}
+                                    />
+
                                 </div>
-                                <div className="form-group flex justify-between m-4">
+                                <div className="form-group flex justify-between my-2">
+                                    <label htmlFor="leaveDates" className="my-auto">Ngày kết thúc: </label>
+
+                                    <input
+                                        type="date"
+                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2 ml-16"
+                                        style={{ outline: "none" }}
+                                        value={endDate} // Đặt giá trị của input bằng giá trị của trạng thái
+                                        onChange={handleEndDateChange}
+                                    />
+
+                                </div>
+                                <div className="form-group flex justify-between my-2">
                                     <label htmlFor="reason" className="my-auto">Lý do xin nghỉ:</label>
                                     <textarea
                                         id="reason"
                                         name="reason"
                                         rows="4"
-                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
+                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2 ml-16"
                                         maxLength={100}
                                     ></textarea>
                                 </div>
-                                <div className="form-buttons flex justify-center gap-4">
+                                <div className="form-buttons flex justify-center gap-4 pt-4">
                                     <button type="button" onClick={closePopupWithConfirmation}
                                             className="btn bg-red-500 px-4 py-2 rounded-lg text-white"> Hủy
                                     </button>
