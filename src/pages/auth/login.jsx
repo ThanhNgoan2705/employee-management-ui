@@ -24,16 +24,13 @@ export default function Login() {
         }
         const loginDTO = {
             username: username,
-            pass: pass
+            password: password
             // email:email
         };
-        // Log the username and password
-        console.log('Username:', username);
-        console.log('Password:', pass);
         try {
-            const response = await fetch("http://localhost:8081/api/login", {
+            const response = await fetch("http://127.0.0.1:8080/users/login", {
                 method: "POST",
-                headers: {'content-type': 'application/json'},
+                headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(loginDTO)
             });
             console.log("response" + response.status);
@@ -58,25 +55,32 @@ export default function Login() {
     };
 
 
+
+
     const validate = () => {
         let result = true;
 
         if (username === '' || username === null) {
             result = false;
             console.log('Please Enter Username');
+        } else if (username.length !== 8) {
+            result = false;
+            console.log('Please Enter a Username with exactly 8 characters');
         } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
             result = false;
             console.log('Please Enter a Username with only alphanumeric characters');
         }
-        if (pass === '' || pass === null) {
+        if (password === '' || password === null) {
             result = false;
             console.log('Please Enter Password');
         }
-        if (pass.length <8) {
-            result = false;
-            console.log('Password must be at least 8 characters long');
-            alert('Password must be at least 8 characters long');
-        }
+        // if (email === '' || email === null) {
+        //     toast.warning('Please enter Email');
+        //     return false;
+        // } if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+        //     toast.warning('Please enter a valid email');
+        //     return false;
+        // }
         return result;
     };
     return (
