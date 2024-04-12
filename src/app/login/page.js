@@ -5,9 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation'
 
 export default function Login() {
-    // const [username, setUsername] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState("");
+    // const [email, setEmail] = useState("");
     const router = useRouter();
 
     // const handleButtonClick = () => {
@@ -22,9 +22,9 @@ export default function Login() {
 
         }
         const loginDTO = {
-            // email: username,
-            email:email,
+            username: username,
             password: password
+            // email:email
         };
         try {
             const response = await fetch("http://127.0.0.1:8080/users/login", {
@@ -43,14 +43,14 @@ export default function Login() {
                     //
                     const resq = await response.json();
                     if (resq.status === 1) {
-                        sessionStorage.setItem('email', resq.data.email);// Lưu giá trị từ biến state `username`
+                        sessionStorage.setItem('username', resq.data.username);// Lưu giá trị từ biến state `username`
 
                         // Store JSON Data
                         let dataConvertString = JSON.stringify(resq.data);// convert string to object 
                         sessionStorage.setItem('userInfo', dataConvertString);
 
-                        let name = sessionStorage.getItem('email');
-                        console.log(name); // In ra giá trị email đã lưu trữ trong phiên làm việc
+                        let name = sessionStorage.getItem('username');
+                        console.log(name); // In ra giá trị username đã lưu trữ trong phiên làm việc
                         console.log("thành công");
                         router.push('/');
                     } else {
@@ -68,21 +68,28 @@ export default function Login() {
 
     const validate = () => {
         let result = true;
-        // if (username === '' || username === null) {
-        //     result = false;
-        //     console.log('Please Enter Username');
-        // }
+
+        if (username === '' || username === null) {
+            result = false;
+            console.log('Please Enter Username');
+        } else if (username.length !== 8) {
+            result = false;
+            console.log('Please Enter a Username with exactly 8 characters');
+        } else if (!/^[a-zA-Z0-9]+$/.test(username)) {
+            result = false;
+            console.log('Please Enter a Username with only alphanumeric characters');
+        }
         if (password === '' || password === null) {
             result = false;
             console.log('Please Enter Password');
         }
-        if (email === '' || email === null) {
-            toast.warning('Please enter Email');
-            return false;
-        } if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
-            toast.warning('Please enter a valid email');
-            return false;
-        }
+        // if (email === '' || email === null) {
+        //     toast.warning('Please enter Email');
+        //     return false;
+        // } if (!/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+        //     toast.warning('Please enter a valid email');
+        //     return false;
+        // }
         return result;
     };
     return (
@@ -91,16 +98,16 @@ export default function Login() {
                 <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
                     <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
                     <input
-                        // value={username}
-                        // onChange={(e) => setUsername(e.target.value)}
-                        // type="name"
-                        // placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        type="name"
+                        placeholder="Username"
                         className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
 
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        type="email"
-                        placeholder="Email"
+                    // value={email}
+                    // onChange={(e) => setEmail(e.target.value)}
+                    // type="email"
+                    // placeholder="Email"
                     />
                     <input
                         value={password}
