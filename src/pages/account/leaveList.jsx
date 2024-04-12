@@ -1,8 +1,9 @@
-import {Layout} from "@/components/account";
-import {useEffect, useState} from "react";
-import {Nav} from "@/components/Nav.jsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
+import { Layout } from "@/components/account";
+import { useEffect, useState } from "react";
+import { Nav } from "@/components/Nav.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faArrowRight, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+import Link from 'next/link';
 
 export default function LeaveList() {
     const [leaveList, setLeaveList] = useState([]);
@@ -80,72 +81,83 @@ export default function LeaveList() {
             console.log(requestData);
             setRequestId(requestId + 1);
 
-            closePopup();
-            alert("Bạn đã gửi đơn đăng ký thành công");
-            setValue({
-                startDate: null,
-                endDate: null,
-            });
-        }
-    };
+        closePopup();
+        alert("Bạn đã gửi đơn đăng ký thành công");
+        setValue({
+            startDate: null,
+            endDate: null,
+        });
+    }
+};
 
-    const [value, setValue] = useState({
+const [value, setValue] = useState({
+    startDate: null,
+    endDate: null,
+});
+const handleValueChange = (newValue) => {
+    console.log("newValue:", newValue);
+    setValue(newValue);
+};
+
+// const closePopupWithConfirmation = () => {
+//     const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
+//     if (isConfirmed) {
+//         closePopup();
+//     }
+// };
+
+// Thêm phần message cho boss điền đồng ý hoặc từ chối đơn xin nghỉ
+const [message, setMessage] = useState("");
+const handleBossAction = (event) => {
+    setMessage(event.target.value);
+};
+
+const handleApprove = () => {
+    const requestData = {
+        id: requestId,
+        fullName: formData.fullName,
+        department: formData.department,
+        role: formData.role,
+        // leaveDuration: duration,
+        reason: value.reason,
+        message: "Đơn đã được duyệt thành công.",
+    };
+    console.log(requestData);
+    setRequestId(requestId + 1);
+    closePopup();
+    alert("Đơn đã được duyệt thành công.");
+    setValue({
         startDate: null,
         endDate: null,
     });
-    const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
-        setValue(newValue);
-    };
+};
 
-// Thêm phần message cho boss điền đồng ý hoặc từ chối đơn xin nghỉ
-    const [message, setMessage] = useState("");
-    const handleBossAction = (event) => {
-        setMessage(event.target.value);
-    };
-    const handleApprove = () => {
+const handleReject = () => {
+    if (!message) {
+        alert("Vui lòng điền lý do từ chối trước khi gửi!");
+        return;
+    } else {
         const requestData = {
             id: requestId,
             fullName: formData.fullName,
             department: formData.department,
             role: formData.role,
-            // leaveDuration: duration,
+            leaveDuration: duration, // Thêm duration vào đây
             reason: value.reason,
-            message: "Đơn đã được duyệt thành công.",
+            message: message,
         };
         console.log(requestData);
         setRequestId(requestId + 1);
         closePopup();
-        alert("Đơn đã được duyệt thành công.");
+        alert("Đơn đã được từ chối.");
         setValue({
             startDate: null,
             endDate: null,
         });
-    };
-    const handleReject = () => {
-        if (!message) {
-            alert("Vui lòng điền lý do từ chối trước khi gửi!");
-            return;
-        } else {
-            const requestData = {
-                id: requestId,
-                fullName: formData.fullName,
-                department: formData.department,
-                role: formData.role,
-                leaveDuration: duration, // Thêm duration vào đây
-                reason: value.reason,
-                message: message,
-            };
-            console.log(requestData);
-            setRequestId(requestId + 1);
-            closePopup();
-            alert("Đơn đã được từ chối.");
-            setValue({
-                startDate: null,
-                endDate: null,
-            });
-        }
-    };
+    }
+};
+
+
     return (
         <Layout>
             <Nav />
@@ -157,13 +169,13 @@ export default function LeaveList() {
                     <div className="flex max-w-full border-2">
                         <table className="table-auto w-full justify-center items-center text-center">
                             <thead>
-                            <tr>
-                                <th className='w-1.5'>id</th>
-                                <th className='w-1.5'>from</th>
-                                <th className='w-1.5'>to</th>
-                                <th className='w-1.5'>status</th>
-                                <th className='w-1/6'>action</th>
-                            </tr>
+                                <tr>
+                                    <th className='w-1.5'>id</th>
+                                    <th className='w-1.5'>from</th>
+                                    <th className='w-1.5'>to</th>
+                                    <th className='w-1.5'>status</th>
+                                    <th className='w-1/6'>action</th>
+                                </tr>
                             </thead>
                             <tbody>
                             {currentItems.map((leave, index) => (
