@@ -33,31 +33,23 @@ export default function Login() {
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(loginDTO)
             });
-
-            console.log(response);
-            if (response.ok) {// có dữ liệu trả về
-                if (response.status === 400) {
-                    //
-                } else if (response.status === 401) {
-                    //
-                } else if (response.status === 200) {
-                    //
-                    const resq = await response.json();
-                    if (resq.status === 1) {
-                        sessionStorage.setItem('username', resq.data.username);// Lưu giá trị từ biến state `username`
-
-                        // Store JSON Data
-                        let dataConvertString = JSON.stringify(resq.data);// convert string to object 
-                        sessionStorage.setItem('userInfo', dataConvertString);
-
-                        let name = sessionStorage.getItem('username');
-                        console.log(name); // In ra giá trị username đã lưu trữ trong phiên làm việc
-                        console.log("thành công");
-                        router.push('/');
-                    } else {
-                        toast.error(resq.message); // Hiển thị thông báo lỗi từ API trong giao diện
-                    }
+            console.log("response" + response.status);
+            const userId = await response.json();
+            if (response.status === 200) {
+                if (userId !== null) {
+                    sessionStorage.setItem('userId', userId.id);
+                    const response = await fetch(`http://localhost:8081/api/employees/${userId}`, {
+                        method: "GET",
+                        headers: {'content-type': 'application/json'}
+                    });
+                    const userInfo = await response.json();
+                    console.log(userInfo);
+                    let dataConvertString = JSON.stringify(userInfo);
+                    sessionStorage.setItem('userInfo', dataConvertString);
                 }
+                router.push('/account/leaveList');
+            } else {
+                toast.error('Failed: ' + response.status); // Hiển thị thông báo lỗi trong giao diện
             }
         } catch (err) {
             toast.error('Failed: ' + err.message); // Hiển thị thông báo lỗi trong giao diện
@@ -97,23 +89,18 @@ export default function Login() {
         <>
             <Layout>
                 <main className="flex min-h-screen flex-col items-center justify-between p-24">
-                    <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
+                    <form id="yourFormId"
+                          className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
                         <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
                         <input
-                            name="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             type="name"
                             placeholder="Username"
                             className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
-
-                        // value={email}
-                        // onChange={(e) => setEmail(e.target.value)}
-                        // type="email"
-                        // placeholder="Email"
                         />
                         <input
-                            value={password}
+                            value={pass}
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full p-4 mb-4 border border-gray-300 rounded-lg dark:border-neutral-800"
                             type="password"
