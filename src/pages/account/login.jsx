@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation'
+import { Layout } from "@/components/account";
 
 export default function Login() {
     const [username, setUsername] = useState('');
@@ -94,6 +95,7 @@ export default function Login() {
     };
     return (
         <>
+        <Layout>
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
                 <form className="flex flex-col items-center justify-between w-full max-w-md p-8 bg-white rounded-xl shadow-lg dark:bg-zinc-800/30">
                     <h1 className="mb-8 text-3xl font-semibold text-center">Login</h1>
@@ -141,6 +143,7 @@ export default function Login() {
                     hideProgressBar={true}
                 ></ToastContainer>
             </main>
+            </Layout>
         </>
     );
 }
