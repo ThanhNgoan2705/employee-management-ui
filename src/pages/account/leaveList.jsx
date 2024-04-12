@@ -1,8 +1,8 @@
-import { Layout } from "@/components/account";
-import { useEffect, useState } from "react";
-import { Nav } from "@/components/Nav.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {Layout} from "@/components/account";
+import {useEffect, useState} from "react";
+import {Nav} from "@/components/Nav.jsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
 import Link from 'next/link';
 
 export default function LeaveList() {
@@ -39,7 +39,6 @@ export default function LeaveList() {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = leaveList.slice(indexOfFirstItem, indexOfLastItem);
-
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(leaveList.length / itemsPerPage); i++) {
         pageNumbers.push(i);
@@ -149,7 +148,7 @@ export default function LeaveList() {
     };
     return (
         <Layout>
-            <Nav />
+            <Nav/>
             <div className="flex bg-blue-50">
                 <h1 className="text-2xl font-semibold text-center">Leave List</h1>
             </div>
@@ -222,6 +221,7 @@ export default function LeaveList() {
 </div>
 </div>
 
-        </Layout>
-    );
+</Layout>
+)
+    ;
 }
