@@ -1,8 +1,8 @@
-import {Layout} from "@/components/account";
-import {useEffect, useState} from "react";
-import {Nav} from "@/components/Nav.jsx";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid-svg-icons";
+import { Layout } from "@/components/account";
+import { useEffect, useState } from "react";
+import { Nav } from "@/components/Nav.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faArrowRight, faEye, faTrash } from "@fortawesome/free-solid-svg-icons";
 import Link from 'next/link';
 
 export default function LeaveList() {
@@ -47,113 +47,53 @@ export default function LeaveList() {
     for (let i = 1; i <= Math.ceil(leaveList.length / itemsPerPage); i++) {
         pageNumbers.push(i);
     }
-// man hinh chi tiet don xin nghi
+    // man hinh chi tiet don xin nghi
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const openPopup = () => setIsPopupOpen(true);
+    const openPopup = (idLeave) => {
+        console.log("idLeave" + idLeave);
+        setIsPopupOpen(true);
+        getDetailByItineraryId(idLeave);
+    }
     const closePopup = () => setIsPopupOpen(false);
-    const [formData, setFormData] = useState({
-        fullName: "",
-        position: "",
-        from: "",
-    });
-    const [requestId, setRequestId] = useState(1);
-// Nhấn gửi đơn
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Lấy ngày bắt đầu và kết thúc
-        const {startDate, endDate} = value;
+    const [fullName, setFullName] = useState('');
+    const [position, setPosition] = useState('');
+    const [dateStart, setDateStart] = useState('');
+    const [dateEnd, setDateEnd] = useState('');
+    const [reason, setReason] = useState('');
+    const [reasonBoss, setReasonBoss] = useState('');
+    const [status, setStatus] = useState();
+    const [idLeave, setIdLeave]= useState();
+    let [itinerarieData,setItinerarieData ]=useState({});
 
-        if (!startDate || !endDate) {
-            // Hiển thị cảnh báo nếu ngày không được chọn
-            alert("Vui lòng chọn ngày nghỉ trước khi gửi!");
-            return;
-        } else {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            const duration = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1; // Tính duration tại đây
+    //  hien thi danh sach
+    useEffect(() => {
+        getDetailByItineraryId(userId); // id form xin nghi 
 
-            const requestData = {
-                id: requestId,
-                fullName: formData.fullName,
-                department: formData.department,
-                role: formData.role,
-                leaveDuration: duration,
-                reason: event.target.reason.value,
-                message: message,
-            };
-            console.log(requestData);
-            setRequestId(requestId + 1);
-
-            closePopup();
-            alert("Bạn đã gửi đơn đăng ký thành công");
-            setValue({
-                startDate: null,
-                endDate: null,
-            });
-        }
-    };
-
-    const [value, setValue] = useState({
-        startDate: null,
-        endDate: null,
-    });
-    const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
-        setValue(newValue);
-    };
-
-// Thêm phần message cho boss điền đồng ý hoặc từ chối đơn xin nghỉ
-    const [message, setMessage] = useState("");
-    const handleBossAction = (event) => {
-        setMessage(event.target.value);
-    };
-    const handleApprove = () => {
-        const requestData = {
-            id: requestId,
-            fullName: formData.fullName,
-            department: formData.department,
-            role: formData.role,
-            // leaveDuration: duration,
-            reason: value.reason,
-            message: "Đơn đã được duyệt thành công.",
-        };
-        console.log(requestData);
-        setRequestId(requestId + 1);
-        closePopup();
-        alert("Đơn đã được duyệt thành công.");
-        setValue({
-            startDate: null,
-            endDate: null,
-        });
-    };
-    const handleReject = () => {
-        if (!message) {
-            alert("Vui lòng điền lý do từ chối trước khi gửi!");
-            return;
-        } else {
-            const requestData = {
-                id: requestId,
-                fullName: formData.fullName,
-                department: formData.department,
-                role: formData.role,
-                leaveDuration: duration, // Thêm duration vào đây
-                reason: value.reason,
-                message: message,
-            };
-            console.log(requestData);
-            setRequestId(requestId + 1);
-            closePopup();
-            alert("Đơn đã được từ chối.");
-            setValue({
-                startDate: null,
-                endDate: null,
-            });
+    }, [userId]);
+    const getDetailByItineraryId = async (idLeave) => {
+        try {
+            const response = await fetch(`http://localhost:8081/api/leave-applications/${idLeave}`);
+            if (response.ok) {
+                itinerarieData = await response.json();
+                console.log("hfhhf"+itinerarieData);
+                setFullName(itinerarieData.fullName); // Assign the value to name state variables
+                setPosition(itinerarieData.position); // Assign the value to content state variable
+                setDateStart(itinerarieData.from); // Assign the value to dateStart state variable
+                setDateEnd(itinerarieData.to); // Assign the value to dateEnd state variable
+                setReason(itinerarieData.reason);
+                setReasonBoss(itinerarieData.reason_reject);
+                setStatus(itenerarieData.status);
+            } else {
+                console.log('Failed to fetch itinerary data');
+            }
+        } catch (error) {
+            console.log('Error:', error);
         }
     };
 
     return (
         <Layout>
-            <Nav/>
+            <Nav />
             <div className="flex bg-blue-50">
                 <h1 className="text-2xl font-semibold text-center">Leave List</h1>
             </div>
@@ -171,30 +111,143 @@ export default function LeaveList() {
                             </tr>
                             </thead>
                             <tbody>
-                            {currentItems.map((leave, index) => (
-                                <tr key={index}>
-                                    <td className="border px-4 py-2">{leave.id}</td>
-                                    <td className="border px-4 py-2"> {leave.from}</td>
-                                    <td className="border px-4 py-2">{leave.to}</td>
-                                    <td className="border px-4 py-2 ">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1? 'bg-green-100 text-green-800' : leave.status === 2? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
-                                            {leave.status === 1 ? 'Approved' : leave===2? 'Rejected': 'Pending'}
-                                    </span>
-                                    </td>
-                                    <td className="border px-4 py-2">
-                                        <div className="flex items-center justify-between">
-                                            <button
-                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                                <FontAwesomeIcon icon={faEye}/>
-                                            </button>
-                                            <button
-                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                                <FontAwesomeIcon icon={faTrash}/>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                                {currentItems.map((leave, index) => (
+                                    <tr key={index}>
+                                        <td className="border px-4 py-2">{leave.id}</td>
+                                        <td className="border px-4 py-2"> {leave.from}</td>
+                                        <td className="border px-4 py-2">{leave.to}</td>
+                                        <td className="border px-4 py-2 ">
+                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1 ? 'bg-green-100 text-green-800' : leave.status === 2 ? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
+                                                {leave.status === 1 ? 'Approved' : leave === 2 ? 'Rejected' : 'Pending'}
+                                            </span>
+                                        </td>
+                                        <td className="border px-4 py-2">
+                                            <div className="flex items-center justify-between">
+                                                <button  onClick={() => {
+                                                    openPopup(leave.id);
+                                                }}
+                                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                                    data-toggle="modal" data-target="#exampleModal">
+                                                    <FontAwesomeIcon icon={faEye} />
+                                                </button>
+
+                                                {/*  man hinh chi tiet don xin nghi*/}
+                                                {isPopupOpen && (
+                                                    <div className="modal-bg fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+                                                        <div className="modal p-4 bg-white rounded-lg w-[500px]">
+                                                            <div className="flex justify-end">
+                                                                <button onClick={closePopup} className="text-gray-500 hover:text-gray-700 focus:outline-none">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                            <h2 className="text-center text-4xl font-semibold "> Chi tiết đơn nghỉ phép </h2>
+                                                            <form >
+                                                                <div className="form-group flex justify-between m-4">
+                                                                    <label htmlFor="fullName" className="my-auto">
+                                                                        Họ tên:
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        id="fullName"
+                                                                        name="fullName"
+                                                                        value={fullName}
+                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                                                        readOnly
+                                                                    />
+                                                                </div>
+
+                                                                <div className="form-group flex justify-between m-4">
+                                                                    <label htmlFor="department" className="my-auto">
+                                                                        Chức vụ:
+                                                                    </label>
+                                                                    <input
+                                                                        type="text"
+                                                                        id="role"
+                                                                        name="role"
+                                                                        value={position}
+                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                                                        readOnly
+                                                                    />
+                                                                </div>
+                                                                <div className="form-group flex justify-between m-4">
+                                                                    <label htmlFor="leaveDates" className="my-auto">
+                                                                        Ngày bắt đầu: </label>
+
+                                                                    <input
+                                                                        type="date"
+
+                                                                        style={{ outline: "none" }}
+                                                                        value={dateStart}
+                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                                                        readOnly
+
+                                                                    />
+
+                                                                </div>
+                                                                <div className="form-group flex justify-between m-4">
+                                                                    <label htmlFor="leaveDates" className="my-auto">Ngày kết thúc: </label>
+
+                                                                    <input
+                                                                        type="date"
+                                                                        value={dateEnd}
+                                                                        className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
+                                                                        readOnly
+                                                                    />
+
+                                                                </div>
+                                                                <div className="form-group flex justify-between m-4">
+                                                                    <label htmlFor="reason" className="my-auto">
+                                                                        Lý do xin nghỉ:
+                                                                    </label>
+                                                                    <textarea
+                                                                        id="reason"
+                                                                        name="reason"
+                                                                        rows="4"
+                                                                        value={reason} // Giá trị cụ thể
+                                                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
+                                                                        maxLength={100}
+                                                                        readOnly // Để trường này chỉ hiển thị dữ liệu, không cho phép sửa
+                                                                    ></textarea>
+                                                                </div>
+                                                                <div className="form-group flex justify-between m-4">
+                                                                    <label htmlFor="message" className="my-auto">
+                                                                        Lý do từ chối đơn nghỉ (boss)
+                                                                    </label>
+                                                                    <textarea
+                                                                        id="message"
+                                                                        name="message"
+                                                                        rows="4"
+                                                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
+                                                                        maxLength={100}
+                                                                        value={reasonBoss}
+                                                                        // onChange={handleBossAction}
+                                                                    ></textarea>
+                                                                </div>
+                                                                {/* <div className="form-buttons flex justify-center gap-4">
+
+
+                                                                    <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
+                                                                        Từ chối
+                                                                    </button>
+                                                                    <button type="button" onClick={handleApprove} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
+                                                                        Chấp nhận
+                                                                    </button>
+                                                                </div> */}
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {/*  */}
+                                                <button
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
@@ -204,7 +257,7 @@ export default function LeaveList() {
                             onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)}
                             disabled={currentPage === 1}
                         >
-                            <FontAwesomeIcon icon={faArrowLeft}/>
+                            <FontAwesomeIcon icon={faArrowLeft} />
                         </button>
                         {pageNumbers.map((number) => (
                             <button
@@ -220,7 +273,7 @@ export default function LeaveList() {
                             onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : currentPage)}
                             disabled={currentPage === pageNumbers.length}
                         >
-                            <FontAwesomeIcon icon={faArrowRight}/>
+                            <FontAwesomeIcon icon={faArrowRight} />
                         </button>
                     </div>
                 </div>
