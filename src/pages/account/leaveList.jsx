@@ -23,17 +23,11 @@ export default function LeaveList() {
     }, []);
 
     useEffect(() => {
-        fetch(`http://localhost:8081/api/leave-applications/get-by-employee-id/${userId}`)
-            .then((response) => {
-                console.log(response);
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data + "data");
+        fetch('https://jsonplaceholder.typicode.com/users')
+            .then(response => response.json())
+            .then(data => {
                 setLeaveList(data);
-                console.log(" leaveList after set" + leaveList);
-            })
-            .catch((error) => console.error("Error fetching data:", error));
+            });
     }, []);
     const formatDate = (date) => {
         const d = new Date(date);
@@ -186,45 +180,27 @@ export default function LeaveList() {
                                 <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 <FontAwesomeIcon icon={faEye}/>
+
                         </button>
+                        {pageNumbers.map((number) => (
+                            <button
+                                key={number}
+                                className={`px-4 py-2 mx-2 ${currentPage === number ? 'bg-blue-500 text-white' : ''}`}
+                                onClick={() => setCurrentPage(number)}
+                            >
+                                {number}
+                            </button>
+                        ))}
                         <button
-                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                            <FontAwesomeIcon icon={faTrash}/>
+                            className="px-4 py-2 mx-2"
+                            onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : currentPage)}
+                            disabled={currentPage === pageNumbers.length}
+                        >
+                            <FontAwesomeIcon icon={faArrowRight}/>
                         </button>
                     </div>
-                </td>
-            </tr>
-            ))}
-        </tbody>
-</table>
-</div>
-    <div className="flex items-center justify-center  mt-4">
-        <button
-            className="px-4 py-2 mx-2"
-            onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)}
-            disabled={currentPage === 1}
-        >
-            <FontAwesomeIcon icon={faArrowLeft}/>
-        </button>
-        {pageNumbers.map((number) => (
-            <button
-                key={number}
-                className={`px-4 py-2 mx-2 ${currentPage === number ? 'bg-blue-500 text-white' : ''}`}
-                onClick={() => setCurrentPage(number)}
-            >
-                {number}
-            </button>
-        ))}
-        <button
-            className="px-4 py-2 mx-2"
-            onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : currentPage)}
-            disabled={currentPage === pageNumbers.length}
-        >
-            <FontAwesomeIcon icon={faArrowRight}/>
-        </button>
-    </div>
-</div>
-</div>
+                </div>
+            </div>
 
 </Layout>
 )
