@@ -63,6 +63,7 @@ export default function LeaveList() {
     const [reasonBoss, setReasonBoss] = useState('');
     const [status, setStatus] = useState();
     const [idLeave, setIdLeave]= useState();
+    const [dayremain, setDayremain]= useState();
     let [itinerarieData,setItinerarieData ]=useState({});
 
     //  hien thi danh sach
@@ -73,14 +74,19 @@ export default function LeaveList() {
     const getDetailByItineraryId = async (idLeave) => {
         try {
             const response = await fetch(`http://localhost:8081/api/leave-applications/${idLeave}`);
+            let employeeData = {};
             if (response.ok) {
                 itinerarieData = await response.json();
+                employeeData = itinerarieData.employee;+
                 console.log("hfhhf"+itinerarieData);
-                setFullName(itinerarieData.fullName); // Assign the value to name state variables
-                setPosition(itinerarieData.position); // Assign the value to content state variable
+                // setFullName(itinerarieData.fullName); // Assign the value to name state variables
+                // setPosition(itinerarieData.position); // Assign the value to content state variable
+                setFullName(employeeData.fullName); // Assign the value to name state variables
+                setPosition(employeeData.position);
                 setDateStart(itinerarieData.from); // Assign the value to dateStart state variable
                 setDateEnd(itinerarieData.to); // Assign the value to dateEnd state variable
                 setReason(itinerarieData.reason);
+                setDayremain(itinerarieData.dayOffRemaining);
                 setReasonBoss(itinerarieData.reason_reject);
                 setStatus(itenerarieData.status);
             } else {
@@ -97,6 +103,7 @@ export default function LeaveList() {
             <div className="flex bg-blue-50">
                 <h1 className="text-2xl font-semibold text-center">Leave List</h1>
             </div>
+            <span>Số ngày nghỉ còn lại : {userInfo.dayOffRemaining}</span>
             <div className="flex my-10 h-screen bg-blue-50 dark:bg-zinc-800">
                 <div className="container mx-auto">
                     <div className="flex max-w-full border-2">
@@ -225,16 +232,16 @@ export default function LeaveList() {
                                                                         // onChange={handleBossAction}
                                                                     ></textarea>
                                                                 </div>
-                                                                {/* <div className="form-buttons flex justify-center gap-4">
+                                                                <div className="form-buttons flex justify-center gap-4">
 
 
-                                                                    <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
+                                                                    <button type="button" className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
                                                                         Từ chối
                                                                     </button>
-                                                                    <button type="button" onClick={handleApprove} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
+                                                                    <button type="button" className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
                                                                         Chấp nhận
                                                                     </button>
-                                                                </div> */}
+                                                                </div>
                                                             </form>
                                                         </div>
                                                     </div>
