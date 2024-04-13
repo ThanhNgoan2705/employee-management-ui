@@ -6,10 +6,10 @@ import {faArrowLeft, faArrowRight, faEye, faTrash} from "@fortawesome/free-solid
 import Datepicker from "react-tailwindcss-datepicker";
 
 export default function LeaveList() {
-    const [leaveList, setLeaveList] = useState([]);
+    const [leaveRequestList, setLeaveList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(5);
-
+    let leaveDaysLeft;
     useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())

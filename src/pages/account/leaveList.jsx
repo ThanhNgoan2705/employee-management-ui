@@ -49,7 +49,11 @@ export default function LeaveList() {
     }
     // man hinh chi tiet don xin nghi
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const openPopup = () => setIsPopupOpen(true);
+    const openPopup = (idLeave) => {
+        console.log("idLeave" + idLeave);
+        setIsPopupOpen(true);
+        getDetailByItineraryId(idLeave);
+    }
     const closePopup = () => setIsPopupOpen(false);
     const [fullName, setFullName] = useState('');
     const [position, setPosition] = useState('');
@@ -59,16 +63,14 @@ export default function LeaveList() {
     const [reasonBoss, setReasonBoss] = useState('');
     const [status, setStatus] = useState();
     const [idLeave, setIdLeave]= useState();
-    const[itinerarieData,setItinerarieData ]=useState({});
+    let [itinerarieData,setItinerarieData ]=useState({});
 
     //  hien thi danh sach
     useEffect(() => {
         getDetailByItineraryId(userId); // id form xin nghi 
 
     }, [userId]);
-
-
-    const getDetailByItineraryId = async (e,idLeave) => {
+    const getDetailByItineraryId = async (idLeave) => {
         try {
             const response = await fetch(`http://localhost:8081/api/leave-applications/${idLeave}`);
             if (response.ok) {
@@ -76,8 +78,8 @@ export default function LeaveList() {
                 console.log("hfhhf"+itinerarieData);
                 setFullName(itinerarieData.fullName); // Assign the value to name state variables
                 setPosition(itinerarieData.position); // Assign the value to content state variable
-                setDateStart(itinerarieData.start_date); // Assign the value to dateStart state variable
-                setDateEnd(itinerarieData.end_date); // Assign the value to dateEnd state variable
+                setDateStart(itinerarieData.from); // Assign the value to dateStart state variable
+                setDateEnd(itinerarieData.to); // Assign the value to dateEnd state variable
                 setReason(itinerarieData.reason);
                 setReasonBoss(itinerarieData.reason_reject);
                 setStatus(itenerarieData.status);
@@ -121,7 +123,9 @@ export default function LeaveList() {
                                         </td>
                                         <td className="border px-4 py-2">
                                             <div className="flex items-center justify-between">
-                                                <button  onClick={(e) => getDetailByItineraryId(e, leave.id)} 
+                                                <button  onClick={() => {
+                                                    openPopup(leave.id);
+                                                }}
                                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                                     data-toggle="modal" data-target="#exampleModal">
                                                     <FontAwesomeIcon icon={faEye} />
