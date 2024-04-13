@@ -23,11 +23,17 @@ export default function LeaveList() {
     }, []);
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(response => response.json())
-            .then(data => {
+        fetch(`http://localhost:8081/api/leave-applications/get-by-employee-id/${userId}`)
+            .then((response) => {
+                console.log(response);
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data + "data");
                 setLeaveList(data);
-            });
+                console.log(" leaveList after set" + leaveList);
+            })
+            .catch((error) => console.error("Error fetching data:", error));
     }, []);
     const formatDate = (date) => {
         const d = new Date(date);
@@ -156,13 +162,13 @@ export default function LeaveList() {
                     <div className="flex max-w-full border-2">
                         <table className="table-auto w-full justify-center items-center text-center">
                             <thead>
-                                <tr>
-                                    <th className='w-1.5'>id</th>
-                                    <th className='w-1.5'>from</th>
-                                    <th className='w-1.5'>to</th>
-                                    <th className='w-1.5'>status</th>
-                                    <th className='w-1/6'>action</th>
-                                </tr>
+                            <tr>
+                                <th className='w-1.5'>id</th>
+                                <th className='w-1.5'>from</th>
+                                <th className='w-1.5'>to</th>
+                                <th className='w-1.5'>status</th>
+                                <th className='w-1/6'>action</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {currentItems.map((leave, index) => (
@@ -174,13 +180,31 @@ export default function LeaveList() {
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1? 'bg-green-100 text-green-800' : leave.status === 2? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
                                             {leave.status === 1 ? 'Approved' : leave===2? 'Rejected': 'Pending'}
                                     </span>
-                                </td>
-                                <td className="border px-4 py-2">
-                                <div className="flex items-center justify-between">
-                                <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <FontAwesomeIcon icon={faEye}/>
-
+                                    </td>
+                                    <td className="border px-4 py-2">
+                                        <div className="flex items-center justify-between">
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                                <FontAwesomeIcon icon={faEye}/>
+                                            </button>
+                                            <button
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                                <FontAwesomeIcon icon={faTrash}/>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className="flex items-center justify-center  mt-4">
+                        <button
+                            className="px-4 py-2 mx-2"
+                            onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)}
+                            disabled={currentPage === 1}
+                        >
+                            <FontAwesomeIcon icon={faArrowLeft}/>
                         </button>
                         {pageNumbers.map((number) => (
                             <button
@@ -202,7 +226,7 @@ export default function LeaveList() {
                 </div>
             </div>
 
-</Layout>
-)
-    ;
+        </Layout>
+    )
+        ;
 }
