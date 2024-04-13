@@ -35,6 +35,10 @@ export default function LeaveList() {
             })
             .catch((error) => console.error("Error fetching data:", error));
     }, []);
+    const formatDate = (date) => {
+        const d = new Date(date);
+        return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+    }
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -146,6 +150,7 @@ export default function LeaveList() {
             });
         }
     };
+
     return (
         <Layout>
             <Nav/>
@@ -169,7 +174,7 @@ export default function LeaveList() {
                             {currentItems.map((leave, index) => (
                                 <tr key={index}>
                                     <td className="border px-4 py-2">{leave.id}</td>
-                                    <td className="border px-4 py-2">{leave.from}</td>
+                                    <td className="border px-4 py-2"> {leave.from}</td>
                                     <td className="border px-4 py-2">{leave.to}</td>
                                     <td className="border px-4 py-2 ">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1? 'bg-green-100 text-green-800' : leave.status === 2? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
