@@ -7,98 +7,127 @@ export {Nav};
 function Nav() {
     const [currentPage, setcurrentPage] = useState('leaveList');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
-
-    const handleStartDateChange = (newStartDate) => {
-        setStartDate(newStartDate);
-    };
-
-    const handleEndDateChange = (newEndDate) => {
-        setEndDate(newEndDate);
-    };
 
     const openPopup = () => setIsPopupOpen(true);
     const closePopup = () => setIsPopupOpen(false);
     const [formData, setFormData] = useState({
         fullName: "",
-        department: "",
         role: "",
     });
-    const [requestId, setRequestId] = useState(1);
+
     useEffect(() => {
-        // Mock API giả
-        fetch("https://jsonplaceholder.typicode.com/users/1")
-            .then((response) => response.json())
-            .then((data) => {
+        const fetchEmployeeData = async () => {
+            try {
+                // Lấy ID từ localStorage
+                // const storedId = localStorage.getItem('employeeId');
+                // if (!storedId) {
+                //     throw new Error('Employee ID not found in localStorage');
+                // }
+                const storedId = sessionStorage.getItem('userId');
+                if (!storedId) {
+                    throw new Error('Employee ID not found in localStorage');
+                }
+
+
+                // Gọi API với ID từ localStorage
+                const response = await fetch(`http://localhost:8081/api/employees/${storedId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch employee data');
+                }
+
+                const data = await response.json();
+                console.log(data); // Kiểm tra dữ liệu được trả về từ API
+
                 // Set data to form fields
                 setFormData({
-                    fullName: data.name,
-                    department: data.company.name,
-                    role: data.company.catchPhrase,
+                    fullName: data.fullName,
+                    role: data.position,
                 });
-            })
-            .catch((error) => console.error("Error fetching data:", error));
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+
+        fetchEmployeeData();
     }, []);
+
     // Nhấn gửi đơn
-    const handleSubmit = (event) => {
+    const handleSubmit =  (event) => {
         event.preventDefault();
 
-        if (!value.startDate || !value.endDate) {
+        const storedId = sessionStorage.getItem('userId');
+        if (!storedId) {
+            throw new Error('Employee ID not found in localStorage');
+        }
+
+        if (!startDate || !endDate) {
             // Hiển thị cảnh báo nếu ngày không được chọn
             alert("Vui lòng chọn ngày nghỉ trước khi gửi!");
             return;
         } else {
-            const start = new Date(value.startDate);
-            const end = new Date(value.endDate);
-            const duration = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
-
             const requestData = {
-                id: requestId,
-                fullName: formData.fullName,
-                department: formData.department,
-                role: formData.role,
-                // leaveDates: value, // thời gian ngày bd đến kt
-                leaveDuration: duration,
                 reason: event.target.reason.value,
+                from: startDate,
+                to: endDate
+
             };
-            console.log(requestData);
-            setRequestId(requestId + 1);
             // Gửi dữ liệu
-            // fetch('URL của API', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(requestData)
-            // })
-            // .then(response => {
-            //     if (response.ok) {
-            //         console.log('Dữ liệu đã được gửi thành công!');
-            //         // Thực hiện các hành động khác (ví dụ: hiển thị thông báo)
-            //     } else {
-            //         console.error('Đã xảy ra lỗi khi gửi dữ liệu.');
-            //         // Xử lý lỗi nếu cần
-            //     }
-            // })
-            // .catch(error => console.error('Lỗi:', error));
-            closePopup();
-            alert("Bạn đã gửi đơn đăng ký thành công")
-            setValue({
-                startDate: null,
-                endDate: null,
-            });
+            fetch(`http://localhost:8081/api/leave-applications/save?employeeId=${storedId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Dữ liệu đã được gửi thành công!');
+
+                        closePopup();
+                        alert("Bạn đã gửi đơn đăng ký thành công")
+                        setStartDate("")
+                        setEndDate("")
+                        // Thực hiện các hành động khác (ví dụ: hiển thị thông báo)
+                    } else {
+                        console.error('Đã xảy ra lỗi khi gửi dữ liệu.');
+                        // Xử lý lỗi nếu cần
+                    }
+                })
+                .catch(error => console.error('Lỗi:', error));
+
+
+
         }
     };
 
-    const [value, setValue] = useState({
-        startDate: null,
-        endDate: null,
-    });
-    const handleValueChange = (newValue) => {
-        console.log("newValue:", newValue);
-        setValue(newValue);
+    const [startDate, setStartDate] = useState('');
+    const handleStartDateChange = (event) => {
+        const selectedDate = event.target.value;
+        const today = new Date();
+        const selected = new Date(selectedDate);
+
+        if (selected < today) {
+            alert('Bạn không thể chọn ngày đã kết thúc.');
+        } else {
+            setStartDate(selectedDate);
+        }
     };
+    const [endDate, setEndDate] = useState('');
+    const handleEndDateChange = (event) => {
+        const selectedDate = event.target.value;
+        const today = new Date();
+        const selected = new Date(selectedDate);
+
+        if (selected < today) {
+            alert('Bạn không thể chọn ngày đã kết thúc.');
+        } else if (selected < new Date(startDate)) {
+            alert('Ngày kết thúc phải sau ngày bắt đầu.');
+        } else {
+            setEndDate(selectedDate);
+        }
+    };
+
+
     const closePopupWithConfirmation = () => {
         const isConfirmed = window.confirm("Bạn có chắc chắn muốn đóng không?");
         if (isConfirmed) {
@@ -133,7 +162,7 @@ function Nav() {
                 id="nav-content"
                 className="w-full block flex-grow lg:flex lg:items-center lg:w-auto"
             >
-                <div className="text-sm lg:flex-grow">
+                <div className="text-sm lg:flex-grow justify-between">
                     <a
                         href="/"
                         className={`block mt-4 lg:inline-block lg:mt-0 ${currentPage === 'home' ? 'text-white' : 'text-teal-200'} hover:text-white font-semibold  mr-4`}
@@ -166,9 +195,9 @@ function Nav() {
                 </div>
                 {isPopupOpen && (
                     <div className="popup">
-                        <div className="popup-inner p-4 rounded-lg flex bg-blue-50">
+                        <div className="popup-inner p-4 rounded-lg flex bg-blue-50 justify-center">
                             <form onSubmit={handleSubmit}>
-                                <div className="form-group flex justify-between m-4">
+                                <div className="form-group flex justify-between my-2">
                                     <label htmlFor="fullName" className="my-auto">Họ tên:</label>
                                     <input
                                         type="text"
@@ -178,7 +207,7 @@ function Nav() {
                                         className="border-1 outline-none bg-gray-300 pl-2 h-10 rounded-lg w-64 pr-2"
                                     />
                                 </div>
-                                <div className="form-group flex justify-between m-4">
+                                <div className="form-group flex justify-between my-2">
                                     <label htmlFor="department" className="my-auto">Chức vụ:</label>
                                     <input
                                         type="text"
@@ -212,17 +241,17 @@ function Nav() {
                                     />
 
                                 </div>
-                                <div className="form-group flex justify-between m-4">
+                                <div className="form-group flex justify-between my-2">
                                     <label htmlFor="reason" className="my-auto">Lý do xin nghỉ:</label>
                                     <textarea
                                         id="reason"
                                         name="reason"
                                         rows="4"
-                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2"
+                                        className="border-1 outline-none bg-gray-300 pl-2 pt-2 h-16 rounded-lg w-64 pr-2 ml-16"
                                         maxLength={100}
                                     ></textarea>
                                 </div>
-                                <div className="form-buttons flex justify-center gap-4">
+                                <div className="form-buttons flex justify-center gap-4 pt-4">
                                     <button type="button" onClick={closePopupWithConfirmation}
                                             className="btn bg-red-500 px-4 py-2 rounded-lg text-white"> Hủy
                                     </button>
