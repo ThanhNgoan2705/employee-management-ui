@@ -73,11 +73,13 @@ export default function RequestList() {
     const getDetailByItineraryId = async (idLeave) => {
         try {
             const response = await fetch(`http://localhost:8081/api/leave-applications/${idLeave}`);
+            let employeeData = {};
             if (response.ok) {
                 itinerarieData = await response.json();
+                employeeData = itinerarieData.employee;
                 console.log("hfhhf"+itinerarieData);
-                setFullName(itinerarieData.fullName); // Assign the value to name state variables
-                setPosition(itinerarieData.position); // Assign the value to content state variable
+                setFullName(employeeData.fullName); // Assign the value to name state variables
+                setPosition(employeeData.position); // Assign the value to content state variable
                 setDateStart(itinerarieData.from); // Assign the value to dateStart state variable
                 setDateEnd(itinerarieData.to); // Assign the value to dateEnd state variable
                 setReason(itinerarieData.reason);
