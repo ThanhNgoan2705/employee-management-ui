@@ -102,13 +102,13 @@ export default function LeaveList() {
                     <div className="flex max-w-full border-2">
                         <table className="table-auto w-full justify-center items-center text-center">
                             <thead>
-                                <tr>
-                                    <th className='w-1.5'>id</th>
-                                    <th className='w-1.5'>from</th>
-                                    <th className='w-1.5'>to</th>
-                                    <th className='w-1.5'>status</th>
-                                    <th className='w-1/6'>action</th>
-                                </tr>
+                            <tr>
+                                <th className='w-1.5'>id</th>
+                                <th className='w-1.5'>from</th>
+                                <th className='w-1.5'>to</th>
+                                <th className='w-1.5'>status</th>
+                                <th className='w-1/6'>action</th>
+                            </tr>
                             </thead>
                             <tbody>
                                 {currentItems.map((leave, index) => (
