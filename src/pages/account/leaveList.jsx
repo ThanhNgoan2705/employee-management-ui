@@ -156,13 +156,13 @@ export default function LeaveList() {
                     <div className="flex max-w-full border-2">
                         <table className="table-auto w-full justify-center items-center text-center">
                             <thead>
-                                <tr>
-                                    <th className='w-1.5'>id</th>
-                                    <th className='w-1.5'>from</th>
-                                    <th className='w-1.5'>to</th>
-                                    <th className='w-1.5'>status</th>
-                                    <th className='w-1/6'>action</th>
-                                </tr>
+                            <tr>
+                                <th className='w-1.5'>id</th>
+                                <th className='w-1.5'>from</th>
+                                <th className='w-1.5'>to</th>
+                                <th className='w-1.5'>status</th>
+                                <th className='w-1/6'>action</th>
+                            </tr>
                             </thead>
                             <tbody>
                             {currentItems.map((leave, index) => (
@@ -171,38 +171,44 @@ export default function LeaveList() {
                                     <td className="border px-4 py-2"> {leave.from}</td>
                                     <td className="border px-4 py-2">{leave.to}</td>
                                     <td className="border px-4 py-2 ">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1? 'bg-green-100 text-green-800' : leave.status === 2? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
-                                            {leave.status === 1 ? 'Approved' : leave===2? 'Rejected': 'Pending'}
+                                        <span
+                                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1 ? 'bg-green-100 text-green-800' : leave.status === 2 ? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
+                                            {leave.status === 1 ? 'Approved' : leave === 2 ? 'Rejected' : 'Pending'}
                                     </span>
-                                </td>
-                                <td className="border px-4 py-2">
-                                <div className="flex items-center justify-between">
-                                <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                <FontAwesomeIcon icon={faEye}/>
+                                    </td>
+                                    <td className="border px-4 py-2">
+                                        <div className="flex items-center justify-between">
+                                            <button
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                                <FontAwesomeIcon icon={faEye}/>
 
-                        </button>
-                        {pageNumbers.map((number) => (
-                            <button
-                                key={number}
-                                className={`px-4 py-2 mx-2 ${currentPage === number ? 'bg-blue-500 text-white' : ''}`}
-                                onClick={() => setCurrentPage(number)}
-                            >
-                                {number}
-                            </button>
-                        ))}
-                        <button
-                            className="px-4 py-2 mx-2"
-                            onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : currentPage)}
-                            disabled={currentPage === pageNumbers.length}
-                        >
-                            <FontAwesomeIcon icon={faArrowRight}/>
-                        </button>
+                                            </button>
+                                            {pageNumbers.map((number) => (
+                                                <button
+                                                    key={number}
+                                                    className={`px-4 py-2 mx-2 ${currentPage === number ? 'bg-blue-500 text-white' : ''}`}
+                                                    onClick={() => setCurrentPage(number)}
+                                                >
+                                                    {number}
+                                                </button>
+                                            ))}
+                                            <button
+                                                className="px-4 py-2 mx-2"
+                                                onClick={() => setCurrentPage(currentPage < pageNumbers.length ? currentPage + 1 : currentPage)}
+                                                disabled={currentPage === pageNumbers.length}
+                                            >
+                                                <FontAwesomeIcon icon={faArrowRight}/>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-</Layout>
-)
-    ;
+        </Layout>
+    )
+        ;
 }
