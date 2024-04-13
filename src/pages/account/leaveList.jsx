@@ -29,6 +29,10 @@ export default function LeaveList() {
                 setLeaveList(data);
             });
     }, []);
+    const formatDate = (date) => {
+        const d = new Date(date);
+        return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+    }
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -140,6 +144,7 @@ export default function LeaveList() {
             });
         }
     };
+
     return (
         <Layout>
             <Nav/>
@@ -162,34 +167,20 @@ export default function LeaveList() {
                             <tbody>
                             {currentItems.map((leave, index) => (
                                 <tr key={index}>
-                                    <td className="border px-4 py-2">{leave.name}</td>
-                                    <td className="border px-4 py-2">{leave.username}</td>
-                                    <td className="border px-4 py-2">{leave.email}</td>
-                                    <td className="border px-4 py-2">{leave.phone}</td>
-                                    <td className="border px-4 py-2">
-                                        <div className="flex items-center justify-between">
-                                            <button
-                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                                <FontAwesomeIcon icon={faEye}/>
-                                            </button>
-                                            <button
-                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                                <FontAwesomeIcon icon={faTrash}/>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="flex items-center justify-center  mt-4">
-                        <button
-                            className="px-4 py-2 mx-2"
-                            onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : currentPage)}
-                            disabled={currentPage === 1}
-                        >
-                            <FontAwesomeIcon icon={faArrowLeft}/>
+                                    <td className="border px-4 py-2">{leave.id}</td>
+                                    <td className="border px-4 py-2"> {leave.from}</td>
+                                    <td className="border px-4 py-2">{leave.to}</td>
+                                    <td className="border px-4 py-2 ">
+                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1? 'bg-green-100 text-green-800' : leave.status === 2? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
+                                            {leave.status === 1 ? 'Approved' : leave===2? 'Rejected': 'Pending'}
+                                    </span>
+                                </td>
+                                <td className="border px-4 py-2">
+                                <div className="flex items-center justify-between">
+                                <button
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                <FontAwesomeIcon icon={faEye}/>
+
                         </button>
                         {pageNumbers.map((number) => (
                             <button

@@ -37,6 +37,7 @@ export default function Login() {
                 body: JSON.stringify(loginDTO)
             });
             console.log("response" + response.status);
+            console.log("response" + response);
             const userId = await response.json();
             if (response.status === 200) {
                 if (userId !== null) {
