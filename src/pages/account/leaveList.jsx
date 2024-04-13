@@ -117,8 +117,8 @@ export default function LeaveList() {
                                         <td className="border px-4 py-2"> {leave.from}</td>
                                         <td className="border px-4 py-2">{leave.to}</td>
                                         <td className="border px-4 py-2 ">
-                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1 ? 'bg-green-100 text-green-800' : leave.status === 2 ? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
-                                                {leave.status === 1 ? 'Approved' : leave === 2 ? 'Rejected' : 'Pending'}
+                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1 ? 'bg-green-100 text-green-800' : leave.status === 0 ? 'bg-red-300 text-red-800': 'bg-gray-400 text-black-800' }`}>
+                                                {leave.status === 1 ? 'Approved' : leave.status === 0 ? 'Rejected' : 'Pending'}
                                             </span>
                                         </td>
                                         <td className="border px-4 py-2">

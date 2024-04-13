@@ -62,8 +62,8 @@ export default function RequestList() {
     const [reason, setReason] = useState('');
     const [reasonBoss, setReasonBoss] = useState('');
     const [status, setStatus] = useState();
-    const [idLeave, setIdLeave]= useState();
-    let [itinerarieData,setItinerarieData ]=useState({});
+    let [itinerarieData,setItinerarieData ]=useState({}); 
+    const [statusChanged, setStatusChanged] = useState(false);
 
     //  hien thi danh sach
     useEffect(() => {
@@ -92,6 +92,76 @@ export default function RequestList() {
             console.log('Error:', error);
         }
     };
+    useEffect(()=>{
+        if(statusChanged){
+            window.location.reload()
+        }
+
+    }),[statusChanged]
+
+    
+    const handleReject = async (idLeave, reasonBoss) => {
+       
+    console.log(idLeave);
+        try {
+            const response = await fetch(`http://localhost:8081/api/leave-applications/approve/${idLeave}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reasonReject: reasonBoss,
+                    status: 0,
+                }),
+            });
+    
+            if (response.ok) {
+                setStatusChanged(true);
+                const data = await response.json();
+                console.log(data);
+    
+                closePopup();
+                alert("Đơn đã được từ chối.");
+                if (data.status === 0) {
+                    toast.success(data.message);
+                } else {
+                    toast.error(data.message);
+                }
+            }
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+    
+    const handleApprove = async (idleave, reasonBoss) => {
+        try {
+            const response = await fetch(`http://localhost:8081/api/leave-applications/approve/${idleave}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: 1,
+                    reasonReject: reasonBoss
+                })
+            });
+    
+            if (response.ok) {
+                setStatusChanged(true);
+                const data = await response.json();
+                console.log(data);
+                alert("Đơn đã được duyệt thành công.");
+                closePopup();
+            } else {
+                console.log('Approval failed');
+                alert("Đã xảy ra lỗi khi duyệt đơn. Vui lòng thử lại sau.");
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            alert("Đã xảy ra lỗi khi duyệt đơn. Vui lòng thử lại sau.");
+        }
+    };
+    
 
     return (
         <Layout>
@@ -120,7 +190,7 @@ export default function RequestList() {
                                     <td className="border px-4 py-2">{leave.to}</td>
                                     <td className="border px-4 py-2 ">
                                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${leave.status === 1 ? 'bg-green-100 text-green-800' : leave.status === 2 ? 'bg-gray-400 text-black-800' : 'bg-red-300 text-red-800'}`}>
-                                                {leave.status === 1 ? 'Approved' : leave === 2 ? 'Rejected' : 'Pending'}
+                                                {leave.status === 1 ? 'Approved' : leave.status === 2 ? 'Pending' : 'Rejected'}
                                             </span>
                                     </td>
                                     <td className="border px-4 py-2">
@@ -132,7 +202,6 @@ export default function RequestList() {
                                                      data-toggle="modal" data-target="#exampleModal">
                                                 <FontAwesomeIcon icon={faEye} />
                                             </button>
-
                                             {/*  man hinh chi tiet don xin nghi*/}
                                             {isPopupOpen && (
                                                 <div className="modal-bg fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
@@ -227,16 +296,16 @@ export default function RequestList() {
                                                                     // onChange={handleBossAction}
                                                                 ></textarea>
                                                             </div>
-                                                            {/* <div className="form-buttons flex justify-center gap-4">
+                                                            <div className="form-buttons flex justify-center gap-4">
 
 
-                                                                    <button type="button" onClick={handleReject} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
+                                                                    <button type="button" onClick={() => handleReject(leave.id, reasonBoss)} className="btn bg-red-500 px-4 py-2 rounded-lg text-white">
                                                                         Từ chối
                                                                     </button>
-                                                                    <button type="button" onClick={handleApprove} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
+                                                                    <button type="button" onClick={() => handleApprove(leave.id, reasonBoss)} className="btn bg-blue-500 px-4 py-2 rounded-lg text-white">
                                                                         Chấp nhận
                                                                     </button>
-                                                                </div> */}
+                                                                </div>
                                                         </form>
                                                     </div>
                                                 </div>
